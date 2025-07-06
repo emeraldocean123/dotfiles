@@ -31,9 +31,14 @@
             echo "🧬 Welcome to Joseph's flake shell!"
             export PATH="$HOME/.local/bin:$PATH"
 
-            # Initialize zoxide for Bash
-            if [ -n "$BASH_VERSION" ]; then
+            # Initialize zoxide
+            if command -v zoxide &> /dev/null; then
               eval "$(zoxide init bash)"
+            fi
+
+            # Initialize Oh My Posh
+            if command -v oh-my-posh &> /dev/null; then
+              eval "$(oh-my-posh init bash --config ~/.poshthemes/jandedobbeleer.omp.json)"
             fi
           '';
         };
