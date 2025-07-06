@@ -112,6 +112,59 @@ For enhanced development environment with all tools:
 nix develop  # Enters the flake shell environment
 ```
 
+### 5. NixOS Home Manager Integration
+
+If you're using NixOS with Home Manager, you can integrate these dotfiles directly into your Home Manager configuration for a declarative setup. This eliminates the need to run the bootstrap script and manages everything through Nix.
+
+**Example integration** (see [nixos-config](https://github.com/emeraldocean123/nixos-config) for full examples):
+
+```nix
+# home/<hostname>/joseph.nix
+{ config, pkgs, ... }:
+
+{
+  home.packages = with pkgs; [
+    oh-my-posh
+    fzf
+    # ... other packages
+  ];
+
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      ll = "ls -lah";
+      gs = "git status";
+      ".." = "cd ..";
+    };
+    
+    bashrcExtra = ''
+      # Oh My Posh prompt
+      if command -v oh-my-posh &> /dev/null; then
+        eval "$(oh-my-posh init bash --config ${pkgs.oh-my-posh}/share/oh-my-posh/themes/jandedobbeleer.omp.json)"
+      fi
+    '';
+  };
+
+  programs.git = {
+    enable = true;
+    userName = "Joseph";
+    userEmail = "emeraldocean123@users.noreply.github.com";
+  };
+}
+```
+
+**Benefits of Home Manager integration:**
+- ✅ **Declarative configuration** - Everything defined in Nix
+- ✅ **Reproducible** - Exact same environment on any NixOS machine
+- ✅ **Version controlled** - All changes tracked in git
+- ✅ **Atomic updates** - All or nothing configuration changes
+- ✅ **Rollback support** - Easy to revert to previous configurations
+
+To rebuild your Home Manager configuration:
+```bash
+home-manager switch
+```
+
 ---
 
 ## 📁 Structure
@@ -197,6 +250,36 @@ Test-Path $PROFILE
 The current configuration prevents PATH duplication. If you see duplicates, restart your terminal or run:
 ```bash
 exec bash -l
+```
+
+### NixOS Home Manager issues?
+```bash
+# Check Home Manager status
+home-manager --version
+
+# Rebuild configuration
+home-manager switch
+
+# Check if packages are available
+which oh-my-posh
+which fzf
+
+# View current generation
+home-manager generations
+
+# Rollback if needed
+home-manager switch --switch-generation <number>
+```
+
+### NixOS dotfiles not working with bootstrap script?
+On NixOS, the bootstrap script intentionally skips package installation since packages should be managed through your NixOS configuration or Home Manager. If you need to use the bootstrap script for symlinks only:
+
+```bash
+# The script will still create symlinks but skip package installation
+./bootstrap.sh
+
+# Or use Home Manager integration instead (recommended)
+# Add the configuration to your home/<hostname>/user.nix file
 ```
 
 ---
