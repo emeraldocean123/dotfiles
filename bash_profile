@@ -5,12 +5,7 @@ if [ -f "$HOME/.bashrc" ]; then
     . "$HOME/.bashrc"
 fi
 
-# 🛠️ Ensure ~/.local/bin is in PATH (for Oh My Posh and other tools)
-if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
-    export PATH="$HOME/.local/bin:$PATH"
-fi
-
-# 🖥️ Optional: Show system info on login
+# ️ Optional: Show system info on login
 if [ -x "$(command -v lsb_release)" ]; then
     echo "Welcome to $(lsb_release -ds)"
 elif [ -f /etc/os-release ]; then
