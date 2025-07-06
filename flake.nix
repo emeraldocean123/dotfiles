@@ -36,10 +36,9 @@
               eval "$(zoxide init bash)"
             fi
 
-            # Initialize Oh My Posh
-            if command -v oh-my-posh &> /dev/null; then
-              eval "$(oh-my-posh init bash --config ~/.poshthemes/jandedobbeleer.omp.json)"
-            fi
+            # Set a completely plain prompt that works in VS Code
+            PS1='joseph@debian:\w$ '
+            export PS1
           '';
         };
       });
