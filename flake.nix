@@ -36,9 +36,11 @@
               eval "$(zoxide init bash)"
             fi
 
-            # Set a completely plain prompt that works in VS Code
-            PS1='joseph@debian:\w$ '
-            export PS1
+            # Set a clean prompt that works with any font
+            export PS1='joseph@debian:$(basename "$PWD")$ '
+            
+            # Clear any existing prompt formatting
+            unset PROMPT_COMMAND
           '';
         };
       });
