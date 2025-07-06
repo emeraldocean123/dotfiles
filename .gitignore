@@ -1,0 +1,33 @@
+# Dotfiles .gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/settings.json
+.idea/
+
+# Backup files
+*.bak
+*~
+
+# Temporary files
+*.tmp
+*.temp
+
+# PowerShell specific
+LastExecutionTime.txt
+
+# Shell history files
+.bash_history
+.zsh_history
+
+# SSH keys (never commit these!)
+id_rsa
+id_ed25519
+*.pem
+
+# Personal/local config overrides
+local.conf
+personal.conf
