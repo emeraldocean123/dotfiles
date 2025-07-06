@@ -23,12 +23,28 @@ git clone https://github.com/emeraldocean123/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
-### 2. Run the bootstrap script
+### 2. Choose your setup method
+
+#### Option A: Fresh Install (bootstrap.sh)
+For new systems where you want to install dependencies and set everything up:
 
 ```bash
 chmod +x bootstrap.sh
 ./bootstrap.sh
 ```
+
+#### Option B: Link Existing Config (link.sh)
+If you already have the dotfiles and just want to create symlinks:
+
+```bash
+chmod +x link.sh
+./link.sh
+```
+
+This will:
+- Create backups of existing config files
+- Symlink all dotfiles to your home directory
+- Preserve your existing configurations in a timestamped backup folder
 
 ### 3. For PowerShell (Windows)
 
@@ -47,7 +63,18 @@ nix develop  # Enters the flake shell environment
 
 ## 📁 Structure
 
-- `bash_aliases` - Custom shell aliases
+- `bashrc` - Main bash configuration file with clean prompt
+- `bash_profile` - Bash profile for login shells
+- `bash_aliases` - Custom shell aliases and functions
+- `gitconfig` - Git configuration with user settings
+- `posh-themes/` - Oh My Posh theme configurations
+  - `jandedobbeleer.omp.json` - Custom prompt theme
+- `flake.nix` - Nix development shell configuration
+- `bootstrap.sh` - Cross-platform setup script for fresh installs
+- `link.sh` - Script to symlink all dotfiles to home directory
+- `powershell/` - PowerShell-specific configurations
+  - `Microsoft.PowerShell_profile.ps1` - PowerShell profile
+  - `setup.ps1` - PowerShell setup script
 - `bootstrap.sh` - Cross-platform setup script
 - `flake.nix` - Nix flake for portable shell environment
 - `powershell/` - PowerShell configuration files
