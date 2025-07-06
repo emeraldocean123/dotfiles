@@ -23,11 +23,18 @@
             unzip
             nano
             oh-my-posh
+            fzf
+            zoxide
           ];
 
           shellHook = ''
             echo "🧬 Welcome to Joseph's flake shell!"
             export PATH="$HOME/.local/bin:$PATH"
+
+            # Initialize zoxide for Bash
+            if [ -n "$BASH_VERSION" ]; then
+              eval "$(zoxide init bash)"
+            fi
           '';
         };
       });
