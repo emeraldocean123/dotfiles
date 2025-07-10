@@ -1,4 +1,5 @@
-# ~/.bash_profile
+#!/bin/bash
+# /home/joseph/dotfiles/bash_profile
 
 # 🧠 Source .bashrc if it exists (for aliases, prompt, etc.)
 if [ -f "$HOME/.bashrc" ]; then

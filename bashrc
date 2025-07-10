@@ -1,5 +1,5 @@
-# ~/.bashrc: executed by bash for non-login shells.
-
+#!/bin/bash
+# /home/joseph/dotfiles/bashrc: executed by bash for non-login shells.
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -36,8 +36,3 @@ alias l='ls -CF'
 # fzf functions
 ff() { find . -type f | fzf; }
 fd() { find . -type d | fzf | xargs -r cd; }
-
-# Oh My Posh prompt
-if command -v oh-my-posh &> /dev/null && [ -f ~/.poshthemes/jandedobbeleer.omp.json ]; then
-    eval "$(oh-my-posh init bash --config ~/.poshthemes/jandedobbeleer.omp.json)"
-fi

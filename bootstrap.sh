@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+# /home/joseph/dotfiles/bootstrap.sh
 # 🚀 Joseph's Unified Dotfiles Bootstrap Script
 # This script installs dependencies AND links all configuration files
 
@@ -297,8 +297,23 @@ echo "📦 Backups saved to: $BACKUP_DIR"
 # Show what was linked
 echo ""
 echo "🔗 Linked configuration files:"
-ls -la "$HOME" | grep -E "\.(bashrc|bash_profile|bash_aliases|gitconfig)" | grep -E "$DOTFILES_DIR" || echo "No bash/git file links found"
-ls -la "$HOME" | grep "\.poshthemes" | grep -E "$DOTFILES_DIR" || echo "No poshthemes link found"
+for file in "$HOME"/.bashrc "$HOME"/.bash_profile "$HOME"/.bash_aliases "$HOME"/.gitconfig; do
+    if [ -L "$file" ] && readlink "$file" | grep -q "$DOTFILES_DIR"; then
+        echo "Linked: $file -> $(readlink "$file")"
+    fi
+done
+if ! ls -l "$HOME"/.bashrc "$HOME"/.bash_profile "$HOME"/.bash_aliases "$HOME"/.gitconfig 2>/dev/null | grep -q "$DOTFILES_DIR"; then
+    echo "No bash/git file links found"
+fi
+
+for file in "$HOME"/.poshthemes*; do
+    if [ -L "$file" ] && readlink "$file" | grep -q "$DOTFILES_DIR"; then
+        echo "Linked: $file -> $(readlink "$file")"
+    fi
+done
+if ! ls -l "$HOME"/.poshthemes* 2>/dev/null | grep -q "$DOTFILES_DIR"; then
+    echo "No poshthemes link found"
+fi
 
 # Show PowerShell configuration if applicable
 if [ "$POWERSHELL_AVAILABLE" = "true" ]; then
