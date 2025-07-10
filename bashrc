@@ -33,6 +33,28 @@ fi
 alias la='ls -A'
 alias l='ls -CF'
 
+
 # fzf functions
 ff() { find . -type f | fzf; }
 fd() { find . -type d | fzf | xargs -r cd; }
+
+# Oh My Posh prompt
+# Persistent Oh My Posh prompt for NixOS/WSL
+if ! command -v oh-my-posh >/dev/null 2>&1; then
+  if command -v nix-shell >/dev/null 2>&1; then
+    # Add oh-my-posh to PATH if not already available
+    OMP_PATH=$(nix-shell -p oh-my-posh --run 'dirname $(which oh-my-posh)' 2>/dev/null)
+    if [ -n "$OMP_PATH" ] && [[ ":$PATH:" != *":$OMP_PATH:"* ]]; then
+      export PATH="$PATH:$OMP_PATH"
+    fi
+  fi
+fi
+
+# Initialize Oh My Posh if available and theme exists
+if command -v oh-my-posh >/dev/null 2>&1; then
+  if [ -f "$HOME/.poshthemes/jandedobbeleer.omp.json" ]; then
+    eval "$(oh-my-posh init bash --config $HOME/.poshthemes/jandedobbeleer.omp.json 2>/dev/null)"
+  elif [ -f "~/.poshthemes/jandedobbeleer.omp.json" ]; then
+    eval "$(oh-my-posh init bash --config ~/.poshthemes/jandedobbeleer.omp.json 2>/dev/null)"
+  fi
+fi
