@@ -33,7 +33,6 @@ fi
 alias la='ls -A'
 alias l='ls -CF'
 
-
 # fzf functions
 ff() { find . -type f | fzf; }
 fd() { find . -type d | fzf | xargs -r cd; }
@@ -58,3 +57,7 @@ if command -v oh-my-posh >/dev/null 2>&1; then
     eval "$(oh-my-posh init bash --config ~/.poshthemes/jandedobbeleer.omp.json 2>/dev/null)"
   fi
 fi
+
+# SSH agent auto-start
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519_debian >/dev/null 2>&1
