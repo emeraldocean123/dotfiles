@@ -31,3 +31,5 @@ id_ed25519
 # Personal/local config overrides
 local.conf
 personal.conf
+powershell/Modules/
+powershell/Scripts/

@@ -69,15 +69,6 @@ try {
         Import-Module z -ErrorAction SilentlyContinue
     }
     
-    # PSFzf - DISABLED due to fzf binary PATH issues
-    # Uncomment when fzf is properly installed and in PATH
-    # if (Get-Module -ListAvailable -Name PSFzf) {
-    #     Import-Module PSFzf -ErrorAction SilentlyContinue
-    #     if (Get-Module PSFzf) {
-    #         Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+f' -PSReadlineChordReverseHistory 'Ctrl+r' -ErrorAction SilentlyContinue
-    #     }
-    # }
-    
 } catch {
     Write-Host "Warning: Some PowerShell modules failed to load: $($_.Exception.Message)" -ForegroundColor Yellow
 }
