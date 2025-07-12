@@ -27,8 +27,8 @@ link_file() {
     local target="$HOME/$2"
     
     if [ ! -f "$source" ]; then
-        echo "⚠️  Source file not found: $source"
-        return 1
+        echo "⚠️  Source file not found: $source (skipping)"
+        return 0
     fi
     
     if [ -f "$target" ] || [ -L "$target" ]; then
@@ -46,41 +46,11 @@ link_dir() {
     local target="$HOME/$2"
     
     if [ ! -d "$source" ]; then
-        echo "⚠️  Source directory not found: $source"
-        return 1
+        echo "⚠️  Source directory not found: $source (skipping)"
+        return 0
     fi
     
     if [ -d "$target" ] || [ -L "$target" ]; then
         echo "📋 Backing up existing $target"
         mv "$target" "$BACKUP_DIR/$(basename "$target")"
     fi
-    
-    echo "🔗 Linking directory $source -> $target"
-    ln -sf "$source" "$target"
-}
-
-echo "🔗 Creating symlinks for configuration files..."
-
-# Bash configuration files
-link_file "bashrc" ".bashrc"
-link_file "bash_profile" ".bash_profile" 
-link_file "bash_aliases" ".bash_aliases"
-
-# Git configuration
-link_file "gitconfig" ".gitconfig"
-
-# Oh My Posh themes directory
-link_dir "posh-themes" ".poshthemes"
-
-echo ""
-echo "✨ Dotfiles linking complete!"
-echo "🔄 Please restart your shell or run 'source ~/.bashrc' to apply changes"
-echo "📦 Backups saved to: $BACKUP_DIR"
-
-# Show what was linked
-echo ""
-echo "🔗 Linked files:"
-ls -la "$HOME" | grep -E "\.(bashrc|bash_profile|bash_aliases|gitconfig)" | grep -E "$DOTFILES_DIR"
-echo ""
-echo "🔗 Linked directories:" 
-ls -la "$HOME" | grep "\.poshthemes" | grep -E "$DOTFILES_DIR"
