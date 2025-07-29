@@ -10,7 +10,7 @@ alias l='ls -lh --color=auto'
 # Git aliases (matches PowerShell git functions)
 alias gs='git status'
 alias ga='git add'
-alias gc='git commit'
+alias gcom='git commit'
 alias gp='git push'
 alias gl='git log --oneline -10'
 alias gd='git diff'
