@@ -159,7 +159,7 @@ home-manager generations
 
 📝 Cleanup Log
 
-2025-07-29: Removed temporary/test files (debug-nixos-wsl.sh, NIXOS-DEBUG-WSL.sh). Saved ~0 MB.
+2025-07-29: Removed temporary/test files (debug-nixos-wsl.sh, NIXOS-DEBUG-WSL.sh, archive/Microsoft.PowerShell_profile.complex.backup.ps1, test.txt). Saved ~0 MB.
 2025-07-29: Fixed Git aliases in Microsoft.PowerShell_profile.ps1 (Version: 2025.9) to use functions for correct subcommand handling.
 
 📝 License
