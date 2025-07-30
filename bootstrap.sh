@@ -149,7 +149,7 @@ link_dir() {
         echo "📋 Backing up existing $target"
         mv "$target" "$BACKUP_DIR/$(basename "$target")"
     fi
-    
+
     echo "🔗 Linking directory $source -> $target"
     ln -sf "$source" "$target"
 }
@@ -161,7 +161,7 @@ echo "🔗 Linking configuration files..."
 
 # Bash configuration files
 link_file "bashrc" ".bashrc"
-link_file "bash_profile" ".bash_profile" 
+link_file "bash_profile" ".bash_profile"
 link_file "bash_aliases" ".bash_aliases"
 
 # Git configuration
