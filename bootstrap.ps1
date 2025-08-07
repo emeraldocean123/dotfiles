@@ -1,4 +1,4 @@
-﻿param(
+﻿﻿param(
     [switch]$SkipModuleInstall,
     [switch]$Force,
     [string]$CustomDotfilesDir
@@ -14,8 +14,8 @@ Write-Host "Starting PowerShell dotfiles setup..." -ForegroundColor Cyan
 Write-Host "Detecting PowerShell environment..." -ForegroundColor Yellow
 
 $IsWindowsOs = $PSVersionTable.Platform -eq 'Win32NT' -or $env:OS -eq 'Windows_NT'
-$IsLinuxOs = $PSVersionTable.Platform -eq 'Unix' -and $PSVersionTable.OS -like '*Linux*'
-$IsMacOSOs = $PSVersionTable.Platform -eq 'Unix' -and $PSVersionTable.OS -like '*Darwin*'
+$IsLinuxOs   = $PSVersionTable.Platform -eq 'Unix' -and $PSVersionTable.OS -like '*Linux*'
+$IsMacOSOs   = $PSVersionTable.Platform -eq 'Unix' -and $PSVersionTable.OS -like '*Darwin*'
 
 Write-Host "Platform: $(if ($IsWindowsOs) { 'Windows' } elseif ($IsLinuxOs) { 'Linux' } elseif ($IsMacOSOs) { 'macOS' } else { 'Unknown' })" -ForegroundColor Green
 Write-Host "PowerShell Version: $($PSVersionTable.PSVersion)" -ForegroundColor Green
@@ -25,7 +25,7 @@ if ($CustomDotfilesDir) {
     $DotfilesDir = $CustomDotfilesDir
 } elseif ($IsWindowsOs) {
     $ProfileDir = if ($PSVersionTable.PSVersion.Major -le 5) { "$env:USERPROFILE\Documents\WindowsPowerShell" } else { "$env:USERPROFILE\Documents\PowerShell" }
-    $DotfilesDir = "$env:USERPROFILE\Documents\dotfiles"
+    $DotfilesDir = "C:\Users\josep\Documents\dotfiles"
 } else {
     $ProfileDir = "$env:HOME/.config/powershell"
     $DotfilesDir = "$env:HOME/Documents/dotfiles"
@@ -49,7 +49,6 @@ Write-Host "Ensure '$DotfilesDir' is synced with Google Drive for cross-device c
 Write-Host "Verifying directory structure..." -ForegroundColor Yellow
 if (-not (Test-Path $DotfilesDir)) {
     Write-Host "Error: Dotfiles directory '$DotfilesDir' does not exist. Please create it or use -CustomDotfilesDir." -ForegroundColor Red
-    Write-Host "Run: New-Item -ItemType Directory -Path '$DotfilesDir' -Force" -ForegroundColor Yellow
     exit 1
 }
 
@@ -57,22 +56,12 @@ $SourceProfile = Join-Path $DotfilesDir "powershell\Microsoft.PowerShell_profile
 $ThemePath = Join-Path $DotfilesDir "posh-themes\jandedobbeleer.omp.json"
 $BootstrapPath = Join-Path $DotfilesDir "bootstrap.ps1"
 $missingFiles = @()
-if (-not (Test-Path $SourceProfile)) {
-    $missingFiles += $SourceProfile
-}
-if (-not (Test-Path $ThemePath)) {
-    $missingFiles += $ThemePath
-}
-if (-not (Test-Path $BootstrapPath)) {
-    $missingFiles += $BootstrapPath
-}
+if (-not (Test-Path $SourceProfile)) { $missingFiles += $SourceProfile }
+if (-not (Test-Path $ThemePath))     { $missingFiles += $ThemePath }
+if (-not (Test-Path $BootstrapPath)) { $missingFiles += $BootstrapPath }
 if ($missingFiles) {
     Write-Host "Error: The following required files are missing:" -ForegroundColor Red
-    foreach ($file in $missingFiles) {
-        Write-Host "  - $file" -ForegroundColor Red
-    }
-    Write-Host "Please ensure these files exist in '$DotfilesDir' with the structure shown above." -ForegroundColor Red
-    Write-Host "For the theme, download from: https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/jandedobbeleer.omp.json" -ForegroundColor Yellow
+    $missingFiles | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }
     exit 1
 } else {
     Write-Host "Directory structure verified successfully" -ForegroundColor Green
@@ -84,50 +73,57 @@ if (-not (Test-Path $ProfileDir)) {
     Write-Host "Created profile directory: $ProfileDir" -ForegroundColor Green
 }
 
-# Refresh PATH to ensure newly installed tools are available
+# Refresh PATH (add WinGet Links so new installs resolve immediately)
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "User") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "Machine")
+$wingetLinks = "$env:LOCALAPPDATA\Microsoft\WinGet\Links"
+if (Test-Path $wingetLinks -and ($env:Path -split ';' -notcontains $wingetLinks)) {
+    $env:Path = "$env:Path;$wingetLinks"
+}
 
 # Install Git via winget (Windows)
 if (-not $SkipModuleInstall -and -not (Get-Command git -ErrorAction SilentlyContinue)) {
     Write-Host "Installing Git..." -ForegroundColor Yellow
-    if ($IsWindowsOs) {
-        if (Get-Command winget -ErrorAction SilentlyContinue) {
-            try {
-                winget install Git.Git --accept-source-agreements --accept-package-agreements
-                Write-Host "Installed Git via winget" -ForegroundColor Green
-                # Refresh PATH again
-                $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "User") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "Machine")
-            } catch {
-                Write-Host "Failed to install Git via winget. Error: $($_.Exception.Message)" -ForegroundColor Red
-                Write-Host "Manually install from: https://git-scm.com/download/win" -ForegroundColor Yellow
-            }
-        } else {
-            Write-Host "Warning: winget not found. Please install winget or manually install Git from: https://git-scm.com/download/win" -ForegroundColor Yellow
-        }
-    } else {
-        Write-Host "Warning: Git installation not supported on this platform. Follow instructions at: https://git-scm.com/downloads" -ForegroundColor Yellow
+    if ($IsWindowsOs -and (Get-Command winget -ErrorAction SilentlyContinue)) {
+        try {
+            winget install Git.Git --accept-source-agreements --accept-package-agreements
+            Write-Host "Installed Git via winget" -ForegroundColor Green
+        } catch { Write-Host "Failed to install Git via winget: $($_.Exception.Message)" -ForegroundColor Red }
     }
 }
 
 # Install Oh My Posh via winget (Windows)
 if (-not $SkipModuleInstall -and -not (Get-Command oh-my-posh -ErrorAction SilentlyContinue)) {
     Write-Host "Installing Oh My Posh..." -ForegroundColor Yellow
-    if ($IsWindowsOs) {
-        if (Get-Command winget -ErrorAction SilentlyContinue) {
-            try {
-                winget install JanDeDobbeleer.OhMyPosh --accept-source-agreements --accept-package-agreements
-                Write-Host "Installed Oh My Posh via winget" -ForegroundColor Green
-                # Refresh PATH again
-                $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "User") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "Machine")
-            } catch {
-                Write-Host "Failed to install Oh My Posh via winget. Error: $($_.Exception.Message)" -ForegroundColor Red
-                Write-Host "Manually install from: https://ohmyposh.dev/docs/installation/windows" -ForegroundColor Yellow
-            }
-        } else {
-            Write-Host "Warning: winget not found. Please install winget or manually install Oh My Posh from: https://ohmyposh.dev/docs/installation/windows" -ForegroundColor Yellow
-        }
-    } else {
-        Write-Host "Warning: Oh My Posh installation not supported on this platform. Follow instructions at: https://ohmyposh.dev/docs/installation" -ForegroundColor Yellow
+    if ($IsWindowsOs -and (Get-Command winget -ErrorAction SilentlyContinue)) {
+        try {
+            winget install JanDeDobbeleer.OhMyPosh --accept-source-agreements --accept-package-agreements
+            Write-Host "Installed Oh My Posh via winget" -ForegroundColor Green
+        } catch { Write-Host "Failed to install Oh My Posh via winget: $($_.Exception.Message)" -ForegroundColor Red }
+    }
+}
+
+# NEW: Install Fastfetch (Windows) and add WinGet Links path for immediate use
+if (-not $SkipModuleInstall -and -not (Get-Command fastfetch -ErrorAction SilentlyContinue)) {
+    Write-Host "Installing Fastfetch..." -ForegroundColor Yellow
+    if ($IsWindowsOs -and (Get-Command winget -ErrorAction SilentlyContinue)) {
+        try {
+            winget install --id=Fastfetch-cli.Fastfetch -e --accept-source-agreements --accept-package-agreements
+            Write-Host "Installed Fastfetch via winget" -ForegroundColor Green
+        } catch { Write-Host "Failed to install Fastfetch via winget: $($_.Exception.Message)" -ForegroundColor Red }
+    }
+}
+# Ensure current session sees the shim
+if (Test-Path $wingetLinks -and ($env:Path -split ';' -notcontains $wingetLinks)) {
+    $env:Path = "$env:Path;$wingetLinks"
+}
+
+# Optional fallback: Winfetch (PowerShell script)
+if (-not $SkipModuleInstall -and -not (Get-Command winfetch -ErrorAction SilentlyContinue)) {
+    try {
+        Install-Script winfetch -Scope CurrentUser -Force -ErrorAction Stop
+        Write-Host "Installed Winfetch (PowerShell script)" -ForegroundColor Green
+    } catch {
+        Write-Host "Failed to install Winfetch script: $($_.Exception.Message)" -ForegroundColor Yellow
     }
 }
 
@@ -140,14 +136,11 @@ if (-not $SkipModuleInstall) {
             try {
                 Install-Module -Name $module -Scope CurrentUser -Force -ErrorAction Stop
                 Write-Host "Installed module: $module" -ForegroundColor Green
-            } catch {
-                Write-Host "Failed to install module $module. Error: $($_.Exception.Message)" -ForegroundColor Red
-            }
+            } catch { Write-Host "Failed to install module $module. Error: $($_.Exception.Message)" -ForegroundColor Red }
         } else {
             Write-Host "Module $module already installed" -ForegroundColor Green
         }
     }
-    # Refresh module path
     Import-Module -Name PSReadLine,Terminal-Icons,z -Force -ErrorAction SilentlyContinue
 }
 
@@ -183,7 +176,5 @@ if (Test-Path $ProfilePath) {
     exit 1
 }
 
-Write-Host "Note: Some changes (e.g., module imports) may require a new PowerShell session. Run 'powershell' or restart your terminal." -ForegroundColor Cyan
-Write-Host "Setup complete! Verify aliases (e.g., 'll', 'gs') and the prompt in a new session." -ForegroundColor Green
-Write-Host "If Git aliases are missing, install Git from: https://git-scm.com/download/win" -ForegroundColor Cyan
-Write-Host "If Oh My Posh prompt is missing, ensure winget is installed and run 'winget install JanDeDobbeleer.OhMyPosh'" -ForegroundColor Cyan
+Write-Host "Note: Some changes may require a new PowerShell session." -ForegroundColor Cyan
+Write-Host "Setup complete!" -ForegroundColor Green
