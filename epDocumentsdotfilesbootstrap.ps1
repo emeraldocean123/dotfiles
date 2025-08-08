@@ -1,0 +1,326 @@
+[1mdiff --git a/bootstrap.ps1 b/bootstrap.ps1[m
+[1mindex 406182d..829d023 100644[m
+[1m--- a/bootstrap.ps1[m
+[1m+++ b/bootstrap.ps1[m
+[36m@@ -1,6 +1,7 @@[m
+ ﻿param([m
+     [switch]$SkipModuleInstall,[m
+     [switch]$Force,[m
+[32m+[m[32m    [switch]$AutoPush,[m
+     [string]$CustomDotfilesDir[m
+ )[m
+ [m
+[36m@@ -9,7 +10,7 @@[m [m$ErrorActionPreference = "Stop"[m
+ Write-Host "Starting PowerShell dotfiles setup..." -ForegroundColor Cyan[m
+ [m
+ # ----------------------------------------[m
+[31m-# 1. Detect environment and setup paths[m
+[32m+[m[32m# 1) Detect environment & set paths[m
+ # ----------------------------------------[m
+ Write-Host "Detecting PowerShell environment..." -ForegroundColor Yellow[m
+ [m
+[36m@@ -17,10 +18,10 @@[m [m$IsWindowsOs = $PSVersionTable.Platform -eq 'Win32NT' -or $env:OS -eq 'Windows_N[m
+ $IsLinuxOs   = $PSVersionTable.Platform -eq 'Unix' -and $PSVersionTable.OS -like '*Linux*'[m
+ $IsMacOSOs   = $PSVersionTable.Platform -eq 'Unix' -and $PSVersionTable.OS -like '*Darwin*'[m
+ [m
+[31m-Write-Host "Platform: $(if ($IsWindowsOs) { 'Windows' } elseif ($IsLinuxOs) { 'Linux' } elseif ($IsMacOSOs) { 'macOS' } else { 'Unknown' })" -ForegroundColor Green[m
+[32m+[m[32mWrite-Host ("Platform: " + (if ($IsWindowsOs) { 'Windows' } elseif ($IsLinuxOs) { 'Linux' } elseif ($IsMacOSOs) { 'macOS' } else { 'Unknown' })) -ForegroundColor Green[m
+ Write-Host "PowerShell Version: $($PSVersionTable.PSVersion)" -ForegroundColor Green[m
+ [m
+[31m-# Set up profile and dotfiles paths[m
+[32m+[m[32m# Resolve dotfiles/profile locations[m
+ if ($CustomDotfilesDir) {[m
+     $DotfilesDir = $CustomDotfilesDir[m
+ } elseif ($IsWindowsOs) {[m
+[36m@@ -31,10 +32,13 @@[m [mif ($CustomDotfilesDir) {[m
+     $DotfilesDir = "$env:HOME/Documents/dotfiles"[m
+ }[m
+ [m
+[32m+[m[32m$ProfileDir  = $ProfileDir ?? (if ($IsWindowsOs) { "$env:USERPROFILE\Documents\PowerShell" } else { "$env:HOME/.config/powershell" })[m
+ $ProfilePath = Join-Path $ProfileDir "Microsoft.PowerShell_profile.ps1"[m
+ $BackupDir   = "$env:HOME/dotfiles-backup-$(Get-Date -Format 'yyyyMMdd-HHmmss')"[m
+ [m
+[31m-# Display expected directory structure[m
+[32m+[m[32m# ----------------------------------------[m
+[32m+[m[32m# 2) Show & verify expected structure[m
+[32m+[m[32m# ----------------------------------------[m
+ Write-Host "Expected directory structure (synced with Google Drive):" -ForegroundColor Cyan[m
+ Write-Host "  $DotfilesDir/" -ForegroundColor Cyan[m
+ Write-Host "  ├── bootstrap.ps1                    # This setup script" -ForegroundColor Cyan[m
+[36m@@ -45,67 +49,76 @@[m [mWrite-Host "      └── jandedobbeleer.omp.json      # Oh My Posh theme file[m
+ Write-Host "Profile will be copied to: $ProfilePath" -ForegroundColor Cyan[m
+ Write-Host "Ensure '$DotfilesDir' is synced with Google Drive for cross-device consistency." -ForegroundColor Cyan[m
+ [m
+[31m-# Verify directory structure[m
+ Write-Host "Verifying directory structure..." -ForegroundColor Yellow[m
+ $SourceProfile = Join-Path $DotfilesDir "powershell\Microsoft.PowerShell_profile.ps1"[m
+ $ThemePath     = Join-Path $DotfilesDir "posh-themes\jandedobbeleer.omp.json"[m
+ $BootstrapPath = Join-Path $DotfilesDir "bootstrap.ps1"[m
+[31m-$missingFiles  = @()[m
+[31m-if (-not (Test-Path $DotfilesDir))   { $missingFiles += $DotfilesDir }[m
+[31m-if (-not (Test-Path $SourceProfile)) { $missingFiles += $SourceProfile }[m
+[31m-if (-not (Test-Path $ThemePath))     { $missingFiles += $ThemePath }[m
+[31m-if (-not (Test-Path $BootstrapPath)) { $missingFiles += $BootstrapPath }[m
+ [m
+[31m-if ($missingFiles) {[m
+[32m+[m[32m$missing = @()[m
+[32m+[m[32mif (-not (Test-Path $DotfilesDir))   { $missing += $DotfilesDir }[m
+[32m+[m[32mif (-not (Test-Path $SourceProfile)) { $missing += $SourceProfile }[m
+[32m+[m[32mif (-not (Test-Path $ThemePath))     { $missing += $ThemePath }[m
+[32m+[m[32mif (-not (Test-Path $BootstrapPath)) { $missing += $BootstrapPath }[m
+[32m+[m
+[32m+[m[32mif ($missing.Count -gt 0) {[m
+     Write-Host "Error: The following required paths/files are missing:" -ForegroundColor Red[m
+[31m-    $missingFiles | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }[m
+[31m-    Write-Host "For the theme, you can download from: https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/jandedobbeleer.omp.json" -ForegroundColor Yellow[m
+[32m+[m[32m    $missing | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }[m
+[32m+[m[32m    Write-Host "For the theme, you can download from:" -ForegroundColor Yellow[m
+[32m+[m[32m    Write-Host "  https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/jandedobbeleer.omp.json" -ForegroundColor Yellow[m
+     exit 1[m
+ } else {[m
+     Write-Host "Directory structure verified successfully" -ForegroundColor Green[m
+ }[m
+ [m
+[31m-# Ensure profile directory exists[m
+[32m+[m[32m# Ensure profile dir exists[m
+ if (-not (Test-Path $ProfileDir)) {[m
+     New-Item -ItemType Directory -Path $ProfileDir -Force | Out-Null[m
+     Write-Host "Created profile directory: $ProfileDir" -ForegroundColor Green[m
+ }[m
+ [m
+[31m-# Refresh PATH[m
+[31m-$env:Path = [System.Environment]::GetEnvironmentVariable("Path", "User") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "Machine")[m
+[32m+[m[32m# Refresh PATH (include WinGet Links so fresh installs work immediately)[m
+[32m+[m[32m$env:Path = [System.Environment]::GetEnvironmentVariable("Path","User") + ";" + [System.Environment]::GetEnvironmentVariable("Path","Machine")[m
+[32m+[m[32m$wingetLinks = "$env:LOCALAPPDATA\Microsoft\WinGet\Links"[m
+[32m+[m[32mif ($IsWindowsOs -and (Test-Path $wingetLinks) -and ($env:Path -split ';' -notcontains $wingetLinks)) {[m
+[32m+[m[32m    $env:Path = "$env:Path;$wingetLinks"[m
+[32m+[m[32m}[m
+ [m
+ # ----------------------------------------[m
+[31m-# 2. Install core tools[m
+[32m+[m[32m# 3) Install core tools (Windows via winget)[m
+ # ----------------------------------------[m
+ function Invoke-WingetInstall($id) {[m
+     if ($IsWindowsOs -and (Get-Command winget -ErrorAction SilentlyContinue)) {[m
+         try {[m
+             winget install --id=$id --accept-source-agreements --accept-package-agreements --silent | Out-Null[m
+             Write-Host "Installed/verified: $id" -ForegroundColor Green[m
+[31m-            $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "User") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "Machine")[m
+[32m+[m[32m            # refresh PATH after install[m
+[32m+[m[32m            $env:Path = [System.Environment]::GetEnvironmentVariable("Path","User") + ";" + [System.Environment]::GetEnvironmentVariable("Path","Machine")[m
+[32m+[m[32m            if ((Test-Path $wingetLinks) -and ($env:Path -split ';' -notcontains $wingetLinks)) {[m
+[32m+[m[32m                $env:Path = "$env:Path;$wingetLinks"[m
+[32m+[m[32m            }[m
+         } catch {[m
+[31m-            Write-Host "Failed to install $id via winget: $($_.Exception.Message)" -ForegroundColor Yellow[m
+[32m+[m[32m            Write-Host ("Failed to install {0} via winget: {1}" -f $id, $_.Exception.Message) -ForegroundColor Yellow[m
+         }[m
+     }[m
+ }[m
+ [m
+ if (-not $SkipModuleInstall) {[m
+     if ($IsWindowsOs) {[m
+[31m-        if (-not (Get-Command git -ErrorAction SilentlyContinue))      { Invoke-WingetInstall "Git.Git" }[m
+[31m-        if (-not (Get-Command oh-my-posh -ErrorAction SilentlyContinue)) { Invoke-WingetInstall "JanDeDobbeleer.OhMyPosh" }[m
+[31m-        if (-not (Get-Command fastfetch -ErrorAction SilentlyContinue)) { Invoke-WingetInstall "Fastfetch-cli.Fastfetch" }[m
+[32m+[m[32m        if (-not (Get-Command git -ErrorAction SilentlyContinue))         { Invoke-WingetInstall "Git.Git" }[m
+[32m+[m[32m        if (-not (Get-Command oh-my-posh -ErrorAction SilentlyContinue))  { Invoke-WingetInstall "JanDeDobbeleer.OhMyPosh" }[m
+[32m+[m[32m        if (-not (Get-Command fastfetch -ErrorAction SilentlyContinue))   { Invoke-WingetInstall "Fastfetch-cli.Fastfetch" }[m
+     }[m
+ [m
+[31m-    # Install modules[m
+[32m+[m[32m    # PowerShell modules (all platforms)[m
+     Write-Host "Installing required PowerShell modules..." -ForegroundColor Yellow[m
+[31m-    $modules = @("PSReadLine", "Terminal-Icons", "z")[m
+[32m+[m[32m    $modules = @("PSReadLine","Terminal-Icons","z")[m
+     foreach ($module in $modules) {[m
+         if (-not (Get-Module -ListAvailable -Name $module)) {[m
+             try {[m
+                 Install-Module -Name $module -Scope CurrentUser -Force -ErrorAction Stop[m
+                 Write-Host "Installed module: $module" -ForegroundColor Green[m
+             } catch {[m
+[31m-                Write-Host "Failed to install module ${module}. Error: $($_.Exception.Message)" -ForegroundColor Yellow[m
+[32m+[m[32m                Write-Host ("Failed to install module {0}. Error: {1}" -f $module, $_.Exception.Message) -ForegroundColor Yellow[m
+             }[m
+         } else {[m
+             Write-Host "Module $module already installed" -ForegroundColor Green[m
+[36m@@ -115,7 +128,7 @@[m [mif (-not $SkipModuleInstall) {[m
+ }[m
+ [m
+ # ----------------------------------------[m
+[31m-# 3. Copy profile with backup[m
+[32m+[m[32m# 4) Copy profile (with backup)[m
+ # ----------------------------------------[m
+ try {[m
+     if (Test-Path $SourceProfile) {[m
+[36m@@ -135,12 +148,12 @@[m [mtry {[m
+         exit 1[m
+     }[m
+ } catch {[m
+[31m-    Write-Host "Error copying profile: $($_.Exception.Message)" -ForegroundColor Red[m
+[32m+[m[32m    Write-Host ("Error copying profile: {0}" -f $_.Exception.Message) -ForegroundColor Red[m
+     exit 1[m
+ }[m
+ [m
+ # ----------------------------------------[m
+[31m-# 4. Source profile[m
+[32m+[m[32m# 5) Source profile[m
+ # ----------------------------------------[m
+ if (Test-Path $ProfilePath) {[m
+     . $ProfilePath[m
+[36m@@ -151,7 +164,7 @@[m [mif (Test-Path $ProfilePath) {[m
+ }[m
+ [m
+ # ----------------------------------------[m
+[31m-# 5. GitHub SSH config[m
+[32m+[m[32m# 6) GitHub SSH config (Windows)[m
+ # ----------------------------------------[m
+ if ($IsWindowsOs) {[m
+     $SshDir        = "$HOME\.ssh"[m
+[36m@@ -164,15 +177,17 @@[m [mif ($IsWindowsOs) {[m
+         Write-Host "Created: $SshDir" -ForegroundColor Green[m
+     }[m
+ [m
+[32m+[m[32m    # Ensure ssh-agent is automatic & running[m
+     try {[m
+         $svc = Get-Service ssh-agent -ErrorAction Stop[m
+         if ($svc.StartType -ne 'Automatic') { Set-Service ssh-agent -StartupType Automatic }[m
+[31m-        if ($svc.Status -ne 'Running') { Start-Service ssh-agent }[m
+[31m-        Write-Host "ssh-agent is running" -ForegroundColor Green[m
+[32m+[m[32m        if ($svc.Status -ne 'Running')      { Start-Service ssh-agent }[m
+[32m+[m[32m        Write-Host "ssh-agent is running (StartupType=Automatic)" -ForegroundColor Green[m
+     } catch {[m
+[31m-        Write-Host "Warning: Could not configure ssh-agent: $($_.Exception.Message)" -ForegroundColor Yellow[m
+[32m+[m[32m        Write-Host ("Warning: Could not configure ssh-agent service: {0}" -f $_.Exception.Message) -ForegroundColor Yellow[m
+     }[m
+ [m
+[32m+[m[32m    # Upsert github.com block in ~/.ssh/config[m
+     $configBlock = @"[m
+ Host github.com[m
+   HostName github.com[m
+[36m@@ -180,7 +195,7 @@[m [mHost github.com[m
+   IdentityFile $KeyPath[m
+   IdentitiesOnly yes[m
+   AddKeysToAgent yes[m
+[31m-  IdentityAgent \\\\.\\pipe\\openssh-ssh-agent[m
+[32m+[m[32m  IdentityAgent \\.\pipe\openssh-ssh-agent[m
+ "@[m
+ [m
+     if (Test-Path $SshConfigPath) {[m
+[36m@@ -190,43 +205,47 @@[m [mHost github.com[m
+                 $cfg, "(?ms)^Host\s+github\.com\b.*?(?=^Host\s|\Z)", $configBlock[m
+             )[m
+             $newCfg | Out-File -FilePath $SshConfigPath -Encoding ascii -Force[m
+[31m-            Write-Host "Updated github.com block" -ForegroundColor Green[m
+[32m+[m[32m            Write-Host "Updated github.com block in ~/.ssh/config" -ForegroundColor Green[m
+         } else {[m
+             Add-Content -Path $SshConfigPath -Value "`r`n$configBlock"[m
+[31m-            Write-Host "Appended github.com block" -ForegroundColor Green[m
+[32m+[m[32m            Write-Host "Appended github.com block to ~/.ssh/config" -ForegroundColor Green[m
+         }[m
+     } else {[m
+         $configBlock | Out-File -FilePath $SshConfigPath -Encoding ascii -Force[m
+         Write-Host "Created ~/.ssh/config" -ForegroundColor Green[m
+     }[m
+ [m
+[32m+[m[32m    # Use Windows OpenSSH (let ~/.ssh/config choose the key)[m
+     try {[m
+         git config --global core.sshCommand $OpenSshExe | Out-Null[m
+[31m-        Write-Host "Set git core.sshCommand" -ForegroundColor Green[m
+[32m+[m[32m        Write-Host "Set git core.sshCommand -> $OpenSshExe" -ForegroundColor Green[m
+     } catch {[m
+[31m-        Write-Host "Warning: could not set git core.sshCommand" -ForegroundColor Yellow[m
+[32m+[m[32m        Write-Host ("Warning: could not set git core.sshCommand: {0}" -f $_.Exception.Message) -ForegroundColor Yellow[m
+     }[m
+ [m
+[32m+[m[32m    # Add key to agent if present[m
+     if (Test-Path $KeyPath) {[m
+         try {[m
+[31m-            $list = ssh-add -l 2>$null[m
+[31m-            if (-not ($list -match [Regex]::Escape((Get-Content "$KeyPath.pub" -ErrorAction SilentlyContinue)))) {[m
+[32m+[m[32m            $agentList = ssh-add -l 2>$null[m
+[32m+[m[32m            $pub = Get-Content "$KeyPath.pub" -ErrorAction SilentlyContinue[m
+[32m+[m[32m            if ($pub -and ($agentList -notmatch [Regex]::Escape($pub))) {[m
+                 ssh-add $KeyPath | Out-Null[m
+[31m-                Write-Host "Added key: $KeyPath" -ForegroundColor Green[m
+[32m+[m[32m                Write-Host "Added key to agent: $KeyPath" -ForegroundColor Green[m
+             } else {[m
+[31m-                Write-Host "Key already loaded" -ForegroundColor Green[m
+[32m+[m[32m                Write-Host "Key already loaded in agent (or no pub found)" -ForegroundColor Green[m
+             }[m
+         } catch {[m
+[31m-            Write-Host "Warning: could not add key" -ForegroundColor Yellow[m
+[32m+[m[32m            Write-Host ("Warning: could not add key to agent: {0}" -f $_.Exception.Message) -ForegroundColor Yellow[m
+         }[m
+     } else {[m
+         Write-Host "Note: $KeyPath not found. Generate one with:" -ForegroundColor Yellow[m
+         Write-Host "  ssh-keygen -t ed25519 -C ""<your-email>"" -f `"$KeyPath`"" -ForegroundColor Yellow[m
+[32m+[m[32m        Write-Host "Then: ssh-add `"$KeyPath`", copy .pub to GitHub, and re-run this script." -ForegroundColor Yellow[m
+     }[m
+ }[m
+ [m
+ # ----------------------------------------[m
+[31m-# 6. Fastfetch for SSH sessions[m
+[32m+[m[32m# 7) Fastfetch/Winfetch banner for SSH-like sessions[m
+ # ----------------------------------------[m
+ if ($env:SSH_CONNECTION -or $env:SSH_TTY) {[m
+     if (Get-Command fastfetch -ErrorAction SilentlyContinue) {[m
+[36m@@ -237,29 +256,34 @@[m [mif ($env:SSH_CONNECTION -or $env:SSH_TTY) {[m
+ }[m
+ [m
+ # ----------------------------------------[m
+[31m-# 7. Auto Git sync (with visible output)[m
+[32m+[m[32m# 8) Optional: Auto-commit & push this repo[m
+ # ----------------------------------------[m
+[31m-try {[m
+[31m-    Write-Host "`n--- Auto Git Sync Starting ---" -ForegroundColor Cyan[m
+[31m-    Set-Location $DotfilesDir[m
+[31m-[m
+[31m-    Write-Host "Staging changes..." -ForegroundColor Yellow[m
+[31m-    git add -A[m
+[31m-[m
+[31m-    Write-Host "Current status before commit:" -ForegroundColor Yellow[m
+[31m-    git status[m
+[31m-[m
+[31m-    $commitMessage = "Auto-update from bootstrap.ps1 ($(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'))"[m
+[31m-    Write-Host "Committing with message: $commitMessage" -ForegroundColor Yellow[m
+[31m-    git commit -m $commitMessage --allow-empty[m
+[31m-[m
+[31m-    Write-Host "Pushing to remote..." -ForegroundColor Yellow[m
+[31m-    git push[m
+[31m-[m
+[31m-    Write-Host "--- Auto Git Sync Complete ---`n" -ForegroundColor Green[m
+[31m-} catch {[m
+[31m-    Write-Host "Warning: Could not auto-sync to GitHub: $($_.Exception.Message)" -ForegroundColor Yellow[m
+[32m+[m[32mif ($AutoPush) {[m
+[32m+[m[32m    try {[m
+[32m+[m[32m        if (Test-Path $DotfilesDir) {[m
+[32m+[m[32m            Set-Location $DotfilesDir[m
+[32m+[m[32m            if (Test-Path ".git") {[m
+[32m+[m[32m                git add -A[m
+[32m+[m[32m                $msg = "bootstrap sync: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"[m
+[32m+[m[32m                git commit -m $msg 2>$null | Out-Null[m
+[32m+[m[32m                git push[m
+[32m+[m[32m                Write-Host "AutoPush: pushed dotfiles to origin." -ForegroundColor Green[m
+[32m+[m[32m            } else {[m
+[32m+[m[32m                Write-Host "AutoPush skipped: not a git repo at $DotfilesDir" -ForegroundColor Yellow[m
+[32m+[m[32m            }[m
+[32m+[m[32m        }[m
+[32m+[m[32m    } catch {[m
+[32m+[m[32m        Write-Host ("AutoPush failed: {0}" -f $_.Exception.Message) -ForegroundColor Yellow[m
+[32m+[m[32m    } finally {[m
+[32m+[m[32m        # go back to original location if needed[m
+[32m+[m[32m        try { Pop-Location } catch { }[m
+[32m+[m[32m    }[m
+ }[m
+ [m
+[31m-Write-Host "Setup complete!" -ForegroundColor Green[m
+[31m-[m
+[32m+[m[32m# ----------------------------------------[m
+[32m+[m[32m# 9) Done[m
+[32m+[m[32m# ----------------------------------------[m
+[32m+[m[32mWrite-Host "Note: Some changes may require a new PowerShell session." -ForegroundColor Cyan[m
+[32m+[m[32mWrite-Host "Setup complete! Verify aliases (e.g., 'll', 'gs') and the prompt in a new session." -ForegroundColor Green[m
+[32m+[m[32mWrite-Host "If Git aliases are missing, install Git: winget install Git.Git" -ForegroundColor Cyan[m
+[32m+[m[32mWrite-Host "If Oh My Posh prompt is missing, install it: winget install JanDeDobbeleer.OhMyPosh" -ForegroundColor Cyan[m
