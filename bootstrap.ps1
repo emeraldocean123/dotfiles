@@ -1,4 +1,4 @@
-# bootstrap.ps1 — Sets up PowerShell dotfiles, profile, modules, and theme; can auto-push to GitHub
+# bootstrap.ps1 — Sets up PowerShell dotfiles, profile, modules, and theme; optional auto-push to GitHub
 
 param(
     [switch]$Force,
@@ -13,7 +13,8 @@ $OnWindows = $PSVersionTable.Platform -eq 'Win32NT' -or $env:OS -eq 'Windows_NT'
 $OnLinux   = $PSVersionTable.Platform -eq 'Unix'
 $OnMac     = $PSVersionTable.Platform -eq 'MacOS'
 
-Write-Host ("Platform: " + (if ($OnWindows) {'Windows'} elseif ($OnLinux) {'Linux'} elseif ($OnMac) {'MacOS'} else {'Unknown'}))
+$PlatformName = if ($OnWindows) { 'Windows' } elseif ($OnLinux) { 'Linux' } elseif ($OnMac) { 'MacOS' } else { 'Unknown' }
+Write-Host "Platform: $PlatformName"
 Write-Host ("PowerShell Version: " + $PSVersionTable.PSVersion)
 
 # --- Expected Paths ---
@@ -52,6 +53,10 @@ foreach ($m in $modules) {
         }
     }
 }
+
+# --- Ensure profile folder ---
+$profileDir = Split-Path -Parent $ProfileTarget
+if (-not (Test-Path $profileDir)) { New-Item -ItemType Directory -Path $profileDir -Force | Out-Null }
 
 # --- Backup Old Profile ---
 $BackupDir = Join-Path $HOME ("dotfiles-backup-{0}" -f (Get-Date -Format "yyyyMMdd-HHmmss"))
