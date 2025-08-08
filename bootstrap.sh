@@ -36,7 +36,11 @@ else
     POWERSHELL_AVAILABLE="false"
 fi
 
-if [ -f /etc/os-release ]; then
+# Detect Git Bash on Windows
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "mingw32" || "$OSTYPE" == "cygwin" ]]; then
+    echo "📦 Detected Git Bash on Windows"
+    NONFREE_INSTALL="false"  # Skip package installation on Windows Git Bash
+elif [ -f /etc/os-release ]; then
     . /etc/os-release
     case "$ID" in
         debian|ubuntu)
@@ -62,7 +66,7 @@ else
 fi
 
 # ----------------------------------------
-# 2. Install essential packages (skip on NixOS)
+# 2. Install essential packages (skip on NixOS and Git Bash on Windows)
 # ----------------------------------------
 if [ "$NONFREE_INSTALL" = "true" ]; then
     echo "📦 Installing essential packages..."
@@ -76,7 +80,7 @@ if [ "$NONFREE_INSTALL" = "true" ]; then
             ;;
     esac
 else
-    echo "📦 Skipping package installation on NixOS (use flake.nix instead)"
+    echo "📦 Skipping package installation on NixOS or Git Bash on Windows (use flake.nix or manual install instead)"
 fi
 
 # ----------------------------------------
@@ -149,7 +153,7 @@ link_dir() {
         echo "📋 Backing up existing $target"
         mv "$target" "$BACKUP_DIR/$(basename "$target")"
     fi
-
+    
     echo "🔗 Linking directory $source -> $target"
     ln -sf "$source" "$target"
 }
