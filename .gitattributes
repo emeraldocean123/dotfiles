@@ -1,2 +1,7 @@
+# Set default behavior for all text files to have LF line endings
+* text=auto eol=lf
+
+# Explicitly set shell and json files to LF
 *.sh text eol=lf
+*.json text eol=lf
 bash/** text eol=lf
