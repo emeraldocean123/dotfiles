@@ -1,33 +1,19 @@
 #!/usr/bin/env bash
-# Simplified bootstrap script for Bash environments (Git Bash, WSL, etc.)
+# Final, robust bootstrap script for Bash environments.
 
 set -e
-# Find the directory where the script is located
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BACKUP_DIR="$HOME/dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
 
-echo "Setting up Bash environment from $DOTFILES_DIR..."
-mkdir -p "$BACKUP_DIR"
+# Define the absolute path to the real bashrc within the dotfiles repo
+BASHRC_SOURCE_PATH="$HOME/Documents/dotfiles/bashrc"
+# Define the path for the loader file in the user's home directory
+BASHRC_TARGET_PATH="$HOME/.bashrc"
 
-# Function to create a symlink with a backup of the original file
-link_with_backup() {
-    local source="$1"
-    local target="$2"
-    if [ -e "$target" ]; then
-        if [ ! -L "$target" ]; then
-            echo "Backing up existing $target to $BACKUP_DIR"
-            mv "$target" "$BACKUP_DIR/"
-        else
-            # If it's already a symlink, just remove it
-            rm "$target"
-        fi
-    fi
-    echo "Linking $source -> $target"
-    ln -s "$source" "$target"
-}
+echo "Creating a loader file at $BASHRC_TARGET_PATH..."
 
-# Link the unified bashrc and the theme directory
-link_with_backup "$DOTFILES_DIR/bashrc" "$HOME/.bashrc"
-link_with_backup "$DOTFILES_DIR/posh-themes" "$HOME/.poshthemes"
+# Create a simple file that does nothing but `source` the repository's bashrc.
+# This is more reliable than symlinks in some Windows environments.
+echo "# This is a loader file. Do not edit it directly." > "$BASHRC_TARGET_PATH"
+echo "# Your actual configuration is in: $BASHRC_SOURCE_PATH" >> "$BASHRC_TARGET_PATH"
+echo "if [ -f \"$BASHRC_SOURCE_PATH\" ]; then source \"$BASHRC_SOURCE_PATH\"; fi" >> "$BASHRC_TARGET_PATH"
 
 echo "✅ Done. Please restart your shell or run 'source ~/.bashrc'."
