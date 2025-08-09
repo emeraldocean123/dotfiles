@@ -1,19 +1,23 @@
 #!/usr/bin/env bash
-# Final, robust bootstrap script for Bash environments.
+# Final, robust bootstrap script using COPY instead of symlinks.
 
 set -e
-
-# Define the absolute path to the real bashrc within the dotfiles repo
-BASHRC_SOURCE_PATH="$HOME/Documents/dotfiles/bashrc"
-# Define the path for the loader file in the user's home directory
+DOTFILES_DIR_PATH="$HOME/Documents/dotfiles"
+BASHRC_SOURCE_PATH="$DOTFILES_DIR_PATH/bashrc"
 BASHRC_TARGET_PATH="$HOME/.bashrc"
+BACKUP_DIR="$HOME/dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
 
-echo "Creating a loader file at $BASHRC_TARGET_PATH..."
+echo "Setting up Bash environment from $DOTFILES_DIR_PATH..."
+mkdir -p "$BACKUP_DIR"
 
-# Create a simple file that does nothing but `source` the repository's bashrc.
-# This is more reliable than symlinks in some Windows environments.
-echo "# This is a loader file. Do not edit it directly." > "$BASHRC_TARGET_PATH"
-echo "# Your actual configuration is in: $BASHRC_SOURCE_PATH" >> "$BASHRC_TARGET_PATH"
-echo "if [ -f \"$BASHRC_SOURCE_PATH\" ]; then source \"$BASHRC_SOURCE_PATH\"; fi" >> "$BASHRC_TARGET_PATH"
+# Backup the old file if it exists
+if [ -f "$BASHRC_TARGET_PATH" ]; then
+    echo "Backing up existing $BASHRC_TARGET_PATH..."
+    mv "$BASHRC_TARGET_PATH" "$BACKUP_DIR/"
+fi
 
-echo "✅ Done. Please restart your shell or run 'source ~/.bashrc'."
+# Copy the new bashrc file. This is more reliable than symlinks in Git Bash.
+echo "Copying $BASHRC_SOURCE_PATH -> $BASHRC_TARGET_PATH..."
+cp "$BASHRC_SOURCE_PATH" "$BASHRC_TARGET_PATH"
+
+echo "✅ Done. Please restart your shell."
