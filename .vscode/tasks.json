@@ -44,10 +44,24 @@
     {
       "label": "Lint PowerShell (PSScriptAnalyzer)",
       "type": "shell",
-      "command": "pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored",
+      "command": "pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored -CI",
       "options": { "cwd": "${workspaceFolder}" },
       "group": "test",
-      "problemMatcher": []
+      "problemMatcher": [
+        {
+          "owner": "pssa",
+          "fileLocation": "absolute",
+          "pattern": {
+            "regexp": "^(.+?):(\\d+):(\\d+): (error|warning|info) ([^:]+): (.+)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "code": 5,
+            "message": 6
+          }
+        }
+      ]
     },
     {
       "label": "Lint PowerShell (CI format)",
@@ -58,9 +72,9 @@
       "problemMatcher": [
         {
           "owner": "pssa",
-          "fileLocation": ["autoDetect"],
+          "fileLocation": "absolute",
           "pattern": {
-            "regexp": "^(.+?):(\\d+):(\\d+): (error|warning|information) ([^:]+): (.+)$",
+            "regexp": "^(.+?):(\\d+):(\\d+): (error|warning|info) ([^:]+): (.+)$",
             "file": 1,
             "line": 2,
             "column": 3,

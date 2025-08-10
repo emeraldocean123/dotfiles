@@ -38,9 +38,16 @@ $issues = Invoke-ScriptAnalyzer @invokeParams
 if ($CI -and $issues) {
   foreach ($i in $issues) {
     $file = if ($i.ScriptPath) { $i.ScriptPath } elseif ($i.Extent.File) { $i.Extent.File } else { '<unknown>' }
+    try { $file = [System.IO.Path]::GetFullPath($file) } catch {}
     $line = $i.Extent.StartLineNumber
     $col  = $i.Extent.StartColumnNumber
-    $sev  = ($i.Severity | ForEach-Object { $_.ToString().ToLowerInvariant() })
+    $sevRaw = $i.Severity.ToString().ToLowerInvariant()
+    $sev = switch ($sevRaw) {
+      'information' { 'info' }
+      'warning'     { 'warning' }
+      'error'       { 'error' }
+      default       { 'info' }
+    }
     $rule = $i.RuleName
     $msg  = $i.Message
     # Format: path:line:col: severity rule: message
