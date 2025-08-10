@@ -91,6 +91,7 @@ Ensure these VS Code settings are enabled:
 - **Safe file management** with appropriate preservation rules
 - **Documentation** of all AI-driven changes
 - **Repeatable processes** for PowerShell environment maintenance
+- **CI validation** ensures theme JSON and verification scripts run on Windows and Linux
 
 ## Verification
 
@@ -101,6 +102,7 @@ The integration has been tested and verified to:
 - ✅ Preserve important files while removing temporary ones
 - ✅ Calculate and report space savings
 - ✅ Document all changes made
+- ✅ CI runs on pushes/PRs via `.github/workflows/validate-dotfiles.yml` on Windows and Linux
 
 ## Future Maintenance
 
