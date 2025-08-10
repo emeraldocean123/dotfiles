@@ -27,4 +27,20 @@ else
   # Not fatal for now
 fi
 
+# Optional: oh-my-posh presence
+if ! command -v oh-my-posh >/dev/null 2>&1; then
+  echo "Warning: oh-my-posh not found on PATH (skip)" >&2
+fi
+
+# Optional: run PSSA lint if pwsh and module are available
+if command -v pwsh >/dev/null 2>&1; then
+  if pwsh -NoProfile -Command "Get-Module -ListAvailable -Name PSScriptAnalyzer | Out-Null" 2>/dev/null; then
+    echo "Running PowerShell lint (PSScriptAnalyzer)..."
+    if ! pwsh -NoProfile -File "$REPO/scripts/lint-powershell.ps1" -ExcludeVendored -CI; then
+      echo "PSScriptAnalyzer lint found issues" >&2
+      # Do not fail the overall verify on lint; CI handles exit codes
+    fi
+  fi
+fi
+
 exit $fail
