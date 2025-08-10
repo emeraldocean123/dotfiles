@@ -78,6 +78,11 @@ For details on using instruction files with Copilot in this repo, see `COPILOT-I
 	- `"chat.promptFiles": true`
 - When cleaning PowerShell profiles, invoke the prompt: `/cleanup-powershell`.
 
+Tasks
+- Use VS Code tasks (Command Palette → Tasks: Run Task):
+	- Verify PowerShell Profile
+	- Validate OMP Theme (Windows/Linux)
+
 ## Try it
 
 - Windows (PowerShell):
