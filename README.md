@@ -45,6 +45,10 @@ Cross‑platform shell, prompt, and tooling configuration for Bash and PowerShel
 - VS Code Integrated Terminal not picking profile
 	- Confirm `$PROFILE` points to `powershell/Microsoft.PowerShell_profile.ps1` after bootstrap; relaunch VS Code.
 
+- Validate Oh My Posh theme JSON
+	- Windows: run `scripts/check-theme.ps1`
+	- Linux: run `scripts/check-theme.sh` (requires `jq` or Python)
+
 ## Guardrails
 
 Do
