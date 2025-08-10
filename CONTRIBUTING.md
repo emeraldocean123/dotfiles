@@ -7,7 +7,7 @@ This repo contains cross-platform dotfiles and a small Nix flake.
 - If you have Nix: `nix fmt`
 - Or use the dev shell where appropriate (see nixos-config repo) — optional here
 
-CI runs `nix fmt` on pushes/PRs and fails if formatting is required.
+Note: Formatting CI is disabled in this repo to avoid noisy failures; prefer running `nix fmt` locally.
 
 ## Local Git hooks (optional)
 
@@ -24,6 +24,7 @@ If Nix isn’t installed locally (Windows), the hook will no-op.
 - Keep scripts idempotent and safe (no destructive defaults)
 - Prefer informative output with Write-Host helpers
 - Follow the vendored PSReadLine pattern (see powershell/profile.bootstrap.ps1)
+- Honor fastfetch guards (`NO_FASTFETCH`, `FASTFETCH_SHOWN`) to avoid duplicate banners
 
 ## Header comment convention
 
@@ -39,3 +40,5 @@ Example:
 - Format Nix: `nix fmt` (if any Nix changes)
 - Keep the Oh My Posh theme single-sourced at `posh-themes/jandedobbeleer.omp.json`
 - Don’t add temporary files or backups to version control
+- Do not modify vendored `modules/PSReadLine/2.4.1/` without bumping and testing
+- Avoid symlinks in bootstrap; use copy semantics with backups

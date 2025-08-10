@@ -10,7 +10,7 @@ This repository is fully integrated with VS Code Copilot's experimental prompt f
 
 - **Purpose**: General guidelines for the entire dotfiles repository
 - **Scope**: Applies to all Copilot chat requests in the workspace
-- **Content**: PowerShell best practices, file management, error handling, VS Code integration
+- **Content**: PowerShell best practices, file management, error handling, VS Code integration, usage/quick start, troubleshooting, guardrails (theme/PSReadLine/fastfetch)
 - **Auto-applies**: Yes, when `github.copilot.chat.codeGeneration.useInstructionFiles` is enabled
 
 ### 2. Specific Instructions (`.github/instructions/powershell-cleanup.instructions.md`)
@@ -61,6 +61,7 @@ Ensure these VS Code settings are enabled:
 1. **`.github/copilot-instructions.md`** - General repository guidelines
 2. **`.github/instructions/powershell-cleanup.instructions.md`** - PowerShell-specific instructions
 3. **`.github/prompts/cleanup-powershell.prompt.md`** - Automated cleanup prompt
+4. Repository files updated to reflect guardrails: `CONTRIBUTING.md`, `README.md`
 
 ## Benefits
 
