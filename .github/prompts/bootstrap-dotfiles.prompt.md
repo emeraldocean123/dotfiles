@@ -30,6 +30,9 @@ You are tasked with bootstrapping this dotfiles repo on a new machine (Windows P
    - Oh My Posh exists and theme path resolves
    - Fastfetch guards (NO_FASTFETCH/FASTFETCH_SHOWN)
 2. In Bash, confirm `.bashrc` is present and prompt renders.
+ 3. Validate the Oh My Posh theme JSON (optional):
+   - Windows: `scripts/check-theme.ps1`
+   - Linux: `scripts/check-theme.sh` (jq or Python)
 
 ## Phase 4: Troubleshoot (if needed)
 - Oh My Posh not found: ensure PATH includes `%LOCALAPPDATA%/Programs/oh-my-posh/bin`

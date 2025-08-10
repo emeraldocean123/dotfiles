@@ -29,10 +29,13 @@ Clean up these file patterns:
 5. Test profile syntax and functionality
 
 ## Phase 4: Verification
-1. Run profile verification script if available
+1. Run profile verification script: `powershell/Verify-Profile.ps1`
 2. Test key functions: `ll`, `la`, `gs`, `which`, etc.
 3. Ensure no syntax errors
 4. Verify module imports work correctly
+5. Optionally validate the unified theme JSON:
+	- Windows: `scripts/check-theme.ps1`
+	- Linux: `scripts/check-theme.sh`
 
 ## Phase 5: Documentation
 1. Update cleanup documentation

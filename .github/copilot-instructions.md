@@ -105,6 +105,10 @@ For details on using instruction files with Copilot in this repo, see `COPILOT-I
 	- Confirm `$PROFILE` path matches `powershell/Microsoft.PowerShell_profile.ps1` copy destination.
 	- Re-run bootstrap to copy the profile and relaunch VS Code.
 
+- Validate Oh My Posh theme JSON
+	- Windows: run `scripts/check-theme.ps1`
+	- Linux: run `scripts/check-theme.sh` (requires `jq` or Python)
+
 ## Do / Don’t for AI changes
 
 Do

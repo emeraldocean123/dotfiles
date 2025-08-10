@@ -65,7 +65,8 @@ Ensure these VS Code settings are enabled:
 3. **`.github/prompts/cleanup-powershell.prompt.md`** - Automated cleanup prompt
 4. **`.github/prompts/bootstrap-dotfiles.prompt.md`** - Guided bootstrap prompt
 5. **`powershell/Verify-Profile.ps1`** - PowerShell profile verification helper
-4. Repository files updated to reflect guardrails: `CONTRIBUTING.md`, `README.md`
+6. **`scripts/check-theme.ps1`** and **`scripts/check-theme.sh`** - Theme JSON validation helpers
+7. Repository files updated to reflect guardrails: `CONTRIBUTING.md`, `README.md`
 
 ## Benefits
 
