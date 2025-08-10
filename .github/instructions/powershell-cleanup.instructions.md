@@ -21,6 +21,8 @@ When working with PowerShell environments, always follow these cleanup guideline
 - Maintain `Scripts/` and `Modules/` directories
 - Keep documentation files (`*.md`)
 - Preserve verification scripts unless explicitly requested to remove
+ - Do not modify or delete vendored PSReadLine in `modules/PSReadLine/2.4.1/`
+ - Do not modify or duplicate the unified Oh My Posh theme in `posh-themes/jandedobbeleer.omp.json`
 
 ### Cleanup Process
 1. **Scan and identify** temporary files using pattern matching
@@ -30,6 +32,7 @@ When working with PowerShell environments, always follow these cleanup guideline
 5. **Calculate and report** space savings (KB/MB)
 6. **Document changes** in cleanup plans or README files
 7. **Verify functionality** after cleanup operations
+8. **Honor profile guards** such as `NO_FASTFETCH` and `FASTFETCH_SHOWN` to avoid duplicate banners
 
 ### Profile Optimization
 - Consolidate duplicate functions and imports

@@ -104,3 +104,22 @@ For details on using instruction files with Copilot in this repo, see `COPILOT-I
 - VS Code Integrated Terminal not picking profile
 	- Confirm `$PROFILE` path matches `powershell/Microsoft.PowerShell_profile.ps1` copy destination.
 	- Re-run bootstrap to copy the profile and relaunch VS Code.
+
+## Do / Don’t for AI changes
+
+Do
+- Keep `posh-themes/jandedobbeleer.omp.json` as the single source of truth.
+- Pin and load PSReadLine 2.4.1 from `modules/PSReadLine/2.4.1/` (update scripts if version changes).
+- Use copy semantics in bootstrap; back up existing files before overwriting.
+- Honor `NO_FASTFETCH` and `FASTFETCH_SHOWN` guards to avoid duplicate banners.
+
+Don’t
+- Don’t delete or rewrite vendored PSReadLine assets in `modules/PSReadLine/`.
+- Don’t duplicate the theme in multiple locations or commit host-specific variants.
+- Don’t add global overrides that break NixOS/Home Manager’s consumption of this repo.
+- Don’t replace copy with symlinks unless explicitly requested.
+
+## Security & privacy
+- Never exfiltrate secrets or tokens; avoid committing machine-specific secrets.
+- Avoid weakening shell security (e.g., adding `xhost +` equivalents or disabling profile guards).
+- Prefer least-privilege changes; test on target platform(s) with minimal side effects.
