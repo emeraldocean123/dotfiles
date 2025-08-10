@@ -4,9 +4,16 @@
 $repoBootstrap = Join-Path $HOME "Documents\dotfiles\powershell\profile.bootstrap.ps1"
 if (Test-Path $repoBootstrap) { . $repoBootstrap }
 
-# 2) Fastfetch (optional)
-if (Get-Command fastfetch -ErrorAction SilentlyContinue) {
-    try { fastfetch } catch {}
+# 2) Fastfetch (optional, once per session)
+if (-not (Get-Variable -Name FASTFETCH_SHOWN -Scope Global -ErrorAction SilentlyContinue)) {
+    if (Get-Command fastfetch -ErrorAction SilentlyContinue) {
+        try {
+            $ffsw = [System.Diagnostics.Stopwatch]::StartNew()
+            fastfetch
+            $ffsw.Stop()
+        } catch {}
+    }
+    $Global:FASTFETCH_SHOWN = $true
 }
 
 # 3) Oh My Posh prompt
@@ -35,8 +42,10 @@ function gs { git status }
 function gl { git --no-pager log --oneline -n 20 }
 function gd { git --no-pager diff }
 
-# 5) Quick Git path note
+# 5) Quick Git path note and profile timing
 $git = (Get-Command git -ErrorAction SilentlyContinue).Source
 if ($git) { Write-Host "Git: $git" -ForegroundColor DarkGray }
+
+# If VS Code PowerShell extension measures startup, keep output minimal; otherwise app note already printed above.
 
 # END profile
