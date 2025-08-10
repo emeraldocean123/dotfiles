@@ -65,6 +65,7 @@ Don’t
 ## VS Code Integration
 
 In VS Code, you can run these tasks from the Command Palette (Ctrl+Shift+P → "Tasks: Run Task"):
+- **Verify Dotfiles (All)** - runs both verification and theme checks
 - **Verify PowerShell Profile** - runs `powershell/Verify-Profile.ps1`
 - **Validate OMP Theme (Windows)** - runs `scripts/check-theme.ps1`
 - **Validate OMP Theme (Linux)** - runs `scripts/check-theme.sh`
