@@ -32,6 +32,14 @@
   "options": { "cwd": "${workspaceFolder}" },
       "group": "test",
       "problemMatcher": []
+    },
+    {
+      "label": "Verify Dotfiles (Linux)",
+      "type": "shell",
+      "command": "bash scripts/verify-dotfiles.sh",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "problemMatcher": []
     }
   ]
 }

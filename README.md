@@ -69,6 +69,7 @@ In VS Code, you can run these tasks from the Command Palette (Ctrl+Shift+P → "
 - **Verify PowerShell Profile** - runs `powershell/Verify-Profile.ps1`
 - **Validate OMP Theme (Windows)** - runs `scripts/check-theme.ps1`
 - **Validate OMP Theme (Linux)** - runs `scripts/check-theme.sh`
+- **Verify Dotfiles (Linux)** - runs consolidated Linux verification
 
 For Copilot users, enable prompt files:
 ```json
