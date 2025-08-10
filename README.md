@@ -70,6 +70,7 @@ In VS Code, you can run these tasks from the Command Palette (Ctrl+Shift+P → "
 - **Validate OMP Theme (Windows)** - runs `scripts/check-theme.ps1`
 - **Validate OMP Theme (Linux)** - runs `scripts/check-theme.sh`
 - **Verify Dotfiles (Linux)** - runs consolidated Linux verification
+- **Lint PowerShell (PSScriptAnalyzer)** - lints PowerShell scripts and modules (excludes vendored PSReadLine)
 
 For Copilot users, enable prompt files:
 ```json

@@ -40,6 +40,14 @@
       "options": { "cwd": "${workspaceFolder}" },
       "group": "test",
       "problemMatcher": []
+    },
+    {
+      "label": "Lint PowerShell (PSScriptAnalyzer)",
+      "type": "shell",
+      "command": "pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "problemMatcher": []
     }
   ]
 }
