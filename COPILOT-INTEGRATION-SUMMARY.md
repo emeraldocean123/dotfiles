@@ -102,7 +102,7 @@ The integration has been tested and verified to:
 - ✅ Preserve important files while removing temporary ones
 - ✅ Calculate and report space savings
 - ✅ Document all changes made
-- ✅ CI runs on pushes/PRs via `.github/workflows/validate-dotfiles.yml` on Windows and Linux
+- ✅ Optional CI can be run manually via `.github/workflows/validate-dotfiles.yml` (no automatic triggers)
 
 ## Future Maintenance
 
