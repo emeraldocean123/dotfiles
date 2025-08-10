@@ -1,6 +1,9 @@
 param(
   [string]$Path = "$PSScriptRoot/..",
-  [switch]$ExcludeVendored
+  [switch]$ExcludeVendored,
+  [switch]$CI,
+  [string]$Settings = "$PSScriptRoot/../PSScriptAnalyzerSettings.psd1",
+  [switch]$NoSettings
 )
 $ErrorActionPreference = 'Stop'
 
@@ -23,7 +26,25 @@ if (-not $paths) {
   exit 0
 }
 
-$issues = Invoke-ScriptAnalyzer -Path $paths -Severity @('Information','Warning','Error') -Recurse -ReportSummary
+$invokeParams = @{ Path = $paths; Severity = @('Information','Warning','Error'); Recurse = $true }
+if (-not $NoSettings -and (Test-Path -LiteralPath $Settings)) {
+  $invokeParams.Settings = $Settings
+}
+
+$issues = Invoke-ScriptAnalyzer @invokeParams
+
+if ($CI -and $issues) {
+  foreach ($i in $issues) {
+    $file = if ($i.ScriptPath) { $i.ScriptPath } elseif ($i.Extent.File) { $i.Extent.File } else { '<unknown>' }
+    $line = $i.Extent.StartLineNumber
+    $col  = $i.Extent.StartColumnNumber
+    $sev  = ($i.Severity | ForEach-Object { $_.ToString().ToLowerInvariant() })
+    $rule = $i.RuleName
+    $msg  = $i.Message
+    # Format: path:line:col: severity rule: message
+    Write-Output ("{0}:{1}:{2}: {3} {4}: {5}" -f $file,$line,$col,$sev,$rule,$msg)
+  }
+}
 if ($issues) {
   $errors = $issues | Where-Object { $_.Severity -eq 'Error' }
   if ($errors) { exit 1 } else { exit 0 }

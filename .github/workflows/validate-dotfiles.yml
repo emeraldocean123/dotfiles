@@ -20,7 +20,7 @@ jobs:
           Install-Module PSScriptAnalyzer -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
       - name: Lint PowerShell (PSScriptAnalyzer on Linux)
         shell: pwsh
-        run: pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored
+        run: pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored -CI
 
   windows:
     runs-on: windows-latest
@@ -41,4 +41,4 @@ jobs:
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
           Install-Module PSScriptAnalyzer -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
       - name: Lint PowerShell (PSScriptAnalyzer on Windows)
-        run: pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored
+        run: pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored -CI
