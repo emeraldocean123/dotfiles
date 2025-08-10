@@ -1,36 +1,60 @@
 # Dotfiles
 
-Cross-platform shell and prompt configuration for Bash and PowerShell, with a Home Manager module for Linux.
+Cross‑platform shell, prompt, and tooling configuration for Bash and PowerShell, with Home Manager integration for Linux/NixOS.
 
-## Structure
+## Structure (key paths)
 
-	- Microsoft.PowerShell_profile.ps1: User profile that boots a vendored PSReadLine and sets up Oh My Posh.
-	- profile.bootstrap.ps1: Loads PSReadLine 2.4.1 from modules/PSReadLine/2.4.1.
+- PowerShell profiles: `powershell/Microsoft.PowerShell_profile.ps1` (boots vendored PSReadLine; sets Oh My Posh)
+- Pinned PSReadLine (vendored): `modules/PSReadLine/2.4.1/`
+- Unified Oh My Posh theme (single source of truth): `posh-themes/jandedobbeleer.omp.json`
+- Bootstrap scripts: `bootstrap.ps1` (Windows), `bootstrap.sh` (Linux)
+- Nix/Home Manager bits: `flake.nix`, `home.nix`
 
-## Quick use
+## Try it
 
-	- Run bootstrap.ps1 in an elevated PowerShell to install tools and copy profile.
-	- Profiles load the vendored PSReadLine and Oh My Posh theme automatically.
+- Windows (PowerShell):
+	- Run `bootstrap.ps1` to install core tools and copy the profile (backs up any existing profile).
+	- The profile pins PSReadLine 2.4.1 from `modules/PSReadLine/2.4.1/` and loads the unified OMP theme.
 
-	- Use this repo as a flake: `home-manager switch --flake .#joseph` or import `homeManagerModules.default` in your system flake.
+- Linux (non‑Nix):
+	- Run `bootstrap.sh` to copy `.bashrc` (safe copy; no symlinks).
 
-## Notes
+- NixOS/Home Manager:
+	- Use this repo as a flake input from your system flake (see `nixos-config`).
+	- Reference the theme via `inputs.dotfiles.outPath + "/posh-themes/jandedobbeleer.omp.json"`.
 
-Unified Oh My Posh theme:
+## Troubleshooting
 
-- Single source of truth: `posh-themes/jandedobbeleer.omp.json` in this repo.
-- PowerShell profile loads it directly from `Documents/dotfiles`.
-- NixOS/Home Manager setups can reference it via a flake input. Example in `nixos-config`:
-	- Add input: `dotfiles.url = "path:../dotfiles";`
-	- Link theme in Home Manager module using `inputs.dotfiles.outPath + "/posh-themes/jandedobbeleer.omp.json"`.
+- Oh My Posh not found
+	- Install oh-my-posh. On Windows, the profile auto-adds `%LOCALAPPDATA%/Programs/oh-my-posh/bin` to PATH.
 
+- PSReadLine import fails / wrong version
+	- Re-run `bootstrap.ps1` to ensure the vendored 2.4.1 is copied/loaded.
+	- Avoid installing conflicting PSReadLine versions globally.
 
-## Formatting & linting (optional)
+- Duplicate fastfetch banner
+	- Set `NO_FASTFETCH=1` to disable; the profile uses `FASTFETCH_SHOWN` to prevent duplicates.
 
-If you have Nix installed, you can:
+- VS Code Integrated Terminal not picking profile
+	- Confirm `$PROFILE` points to `powershell/Microsoft.PowerShell_profile.ps1` after bootstrap; relaunch VS Code.
 
-- Run formatter: `nix fmt` (uses nixpkgs-fmt)
-- Enter dev shell: `nix develop` (provides nixpkgs-fmt)
+## Guardrails
 
-On Windows without Nix, use WSL (Ubuntu) with Nix installed, or skip.
-- Theme path is shared across environments; keep the single theme file in posh-themes/.
+Do
+- Keep `posh-themes/jandedobbeleer.omp.json` as the single source of truth.
+- Pin and load PSReadLine 2.4.1 from `modules/PSReadLine/2.4.1/`.
+- Use copy (not symlink) semantics in bootstrap; back up existing files first.
+- Honor `NO_FASTFETCH` and `FASTFETCH_SHOWN` guards.
+
+Don’t
+- Don’t delete or modify vendored PSReadLine under `modules/PSReadLine/`.
+- Don’t duplicate the theme in multiple locations or commit host-specific variants.
+- Don’t add global overrides that break NixOS/Home Manager consumption of this repo.
+
+## Formatting (optional)
+
+If you have Nix:
+- `nix fmt` (nixpkgs-fmt)
+- `nix develop` for a dev shell
+
+On Windows without Nix, use WSL or skip.
