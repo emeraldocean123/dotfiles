@@ -34,10 +34,14 @@ if (-not $omp) {
 # Theme from dotfiles if available; otherwise default oh-my-posh init
 $themePath = Join-Path $HOME 'Documents\dotfiles\posh-themes\jandedobbeleer.omp.json'
 if ($omp) {
-    if (Test-Path $themePath) {
-        oh-my-posh init pwsh --config $themePath | Invoke-Expression
-    } else {
-        oh-my-posh init pwsh | Invoke-Expression
+    try {
+        if (Test-Path $themePath) {
+            oh-my-posh init pwsh --config $themePath | Invoke-Expression
+        } else {
+            oh-my-posh init pwsh | Invoke-Expression
+        }
+    } catch {
+        Write-Verbose "Oh My Posh init failed: $($_.Exception.Message)" -Verbose:$false
     }
 }
 
