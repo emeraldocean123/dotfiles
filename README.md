@@ -87,3 +87,7 @@ If you have Nix:
 - `nix develop` for a dev shell
 
 On Windows without Nix, use WSL or skip.
+
+Editor/IDE
+- `.editorconfig` enforces consistent basics (LF, UTF-8, 2/4-space indents)
+- VS Code: recommended extensions in `.vscode/extensions.json`
