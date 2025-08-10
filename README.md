@@ -62,6 +62,22 @@ Don’t
 - Don’t duplicate the theme in multiple locations or commit host-specific variants.
 - Don’t add global overrides that break NixOS/Home Manager consumption of this repo.
 
+## VS Code Integration
+
+In VS Code, you can run these tasks from the Command Palette (Ctrl+Shift+P → "Tasks: Run Task"):
+- **Verify PowerShell Profile** - runs `powershell/Verify-Profile.ps1`
+- **Validate OMP Theme (Windows)** - runs `scripts/check-theme.ps1`
+- **Validate OMP Theme (Linux)** - runs `scripts/check-theme.sh`
+
+For Copilot users, enable prompt files:
+```json
+{
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.promptFiles": true
+}
+```
+Then use `/bootstrap-dotfiles` and `/cleanup-powershell` prompts.
+
 ## Formatting (optional)
 
 If you have Nix:
