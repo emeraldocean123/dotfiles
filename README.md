@@ -15,6 +15,7 @@ Cross‑platform shell, prompt, and tooling configuration for Bash and PowerShel
 - Windows (PowerShell):
 	- Run `bootstrap.ps1` to install core tools and copy the profile (backs up any existing profile).
 	- The profile pins PSReadLine 2.4.1 from `modules/PSReadLine/2.4.1/` and loads the unified OMP theme.
+	- In Copilot Chat, you can run the guided prompt `/bootstrap-dotfiles` (requires prompt files enabled).
 
 - Linux (non‑Nix):
 	- Run `bootstrap.sh` to copy `.bashrc` (safe copy; no symlinks).
@@ -22,6 +23,12 @@ Cross‑platform shell, prompt, and tooling configuration for Bash and PowerShel
 - NixOS/Home Manager:
 	- Use this repo as a flake input from your system flake (see `nixos-config`).
 	- Reference the theme via `inputs.dotfiles.outPath + "/posh-themes/jandedobbeleer.omp.json"`.
+
+### Verify (PowerShell)
+- After bootstrap, run `powershell/Verify-Profile.ps1` to check:
+	- PSReadLine version is 2.4.1 (vendored)
+	- Oh My Posh is available and theme path resolves
+	- Fastfetch guards are set to avoid duplicate banners
 
 ## Troubleshooting
 

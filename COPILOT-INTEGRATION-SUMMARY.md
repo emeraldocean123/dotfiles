@@ -20,12 +20,14 @@ This repository is fully integrated with VS Code Copilot's experimental prompt f
 - **Content**: File patterns to clean, preservation rules, cleanup process
 - **Auto-applies**: When working with PowerShell files
 
-### 3. Prompt Files (`.github/prompts/cleanup-powershell.prompt.md`)
+### 3. Prompt Files
 
-- **Purpose**: Reusable cleanup automation prompt
-- **Scope**: Workspace-specific cleanup tasks
-- **Content**: Systematic 5-phase cleanup process
-- **Usage**: Run with `/cleanup-powershell` in VS Code Copilot chat
+- `.github/prompts/cleanup-powershell.prompt.md`
+  - Purpose: Reusable cleanup automation prompt
+  - Usage: `/cleanup-powershell`
+- `.github/prompts/bootstrap-dotfiles.prompt.md`
+  - Purpose: Guided bootstrap for Windows/Linux
+  - Usage: `/bootstrap-dotfiles`
 
 ## How to Use
 
@@ -61,6 +63,8 @@ Ensure these VS Code settings are enabled:
 1. **`.github/copilot-instructions.md`** - General repository guidelines
 2. **`.github/instructions/powershell-cleanup.instructions.md`** - PowerShell-specific instructions
 3. **`.github/prompts/cleanup-powershell.prompt.md`** - Automated cleanup prompt
+4. **`.github/prompts/bootstrap-dotfiles.prompt.md`** - Guided bootstrap prompt
+5. **`powershell/Verify-Profile.ps1`** - PowerShell profile verification helper
 4. Repository files updated to reflect guardrails: `CONTRIBUTING.md`, `README.md`
 
 ## Benefits

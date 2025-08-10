@@ -1,6 +1,6 @@
 ---
 mode: "agent"
-tools: ["terminal", "file_search", "read_file", "replace_string_in_file"]
+tools: []
 description: "Clean up PowerShell environment following best practices"
 ---
 
@@ -45,6 +45,7 @@ Clean up these file patterns:
 - **Test thoroughly** after making changes
 - **Document everything** for transparency
 
-[Reference the PowerShell cleanup instructions](./powershell-cleanup.instructions.md) for detailed guidelines.
+<!-- Reference documentation: If 'powershell-cleanup.instructions.md' does not exist, update this link to an existing file or remove it. -->
+[Reference the PowerShell cleanup instructions](../instructions/powershell-cleanup.instructions.md) for detailed guidelines.
 
 Begin with Phase 1 assessment and proceed systematically through each phase.
