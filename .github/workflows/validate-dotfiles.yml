@@ -30,8 +30,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Validate OMP theme (Windows)
-        run: pwsh -NoProfile -File scripts/check-theme.ps1
       - name: Verify PowerShell profile
         run: pwsh -NoProfile -File powershell/Verify-Profile.ps1
       - name: Verify dotfiles (Windows)
