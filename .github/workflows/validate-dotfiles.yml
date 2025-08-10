@@ -18,7 +18,16 @@ jobs:
           Install-Module PSScriptAnalyzer -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
       - name: Lint PowerShell (PSScriptAnalyzer on Linux)
         shell: pwsh
-        run: pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored -CI
+        run: |
+          $output = & pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored -CI
+          $code = $LASTEXITCODE
+          $output | Tee-Object -FilePath pssa-linux.txt | Out-String
+          exit $code
+      - name: Upload lint output (Linux)
+        uses: actions/upload-artifact@v4
+        with:
+          name: pssa-linux
+          path: pssa-linux.txt
 
   windows:
     runs-on: windows-latest
@@ -37,4 +46,13 @@ jobs:
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
           Install-Module PSScriptAnalyzer -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
       - name: Lint PowerShell (PSScriptAnalyzer on Windows)
-        run: pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored -CI
+        run: |
+          $output = & pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored -CI
+          $code = $LASTEXITCODE
+          $output | Tee-Object -FilePath pssa-windows.txt | Out-String
+          exit $code
+      - name: Upload lint output (Windows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: pssa-windows
+          path: pssa-windows.txt
