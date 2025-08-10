@@ -70,3 +70,37 @@ Deployment
 - Provides a consistent experience for local and remote shells.
 
 For details on using instruction files with Copilot in this repo, see `COPILOT-INTEGRATION-SUMMARY.md`.
+
+## How to use in VS Code
+
+- Enable instruction files in settings:
+	- `"github.copilot.chat.codeGeneration.useInstructionFiles": true`
+	- `"chat.promptFiles": true`
+- When cleaning PowerShell profiles, invoke the prompt: `/cleanup-powershell`.
+
+## Try it
+
+- Windows (PowerShell):
+	- Run `bootstrap.ps1` to install core tools and copy the profile (backs up any existing profile).
+- Linux (non‑Nix):
+	- Run `bootstrap.sh` to copy `.bashrc` (no symlinks).
+- NixOS/Home Manager:
+	- Reference this repo as a flake input from your `nixos-config`; no manual bootstrap needed. The unified theme path is consumed by Home Manager modules.
+
+## Troubleshooting
+
+- Oh My Posh not found
+	- Ensure `oh-my-posh` is installed (Windows: winget; Linux: package manager).
+	- The profile auto-adds the common winget path: `%LOCALAPPDATA%/Programs/oh-my-posh/bin`.
+
+- PSReadLine import fails or wrong version
+	- The profile pins PSReadLine 2.4.1 via `modules/PSReadLine/2.4.1/`.
+	- Re-run `bootstrap.ps1` to ensure the vendored version is copied/loaded.
+	- Avoid installing conflicting PSReadLine versions globally.
+
+- Duplicate fastfetch banner
+	- Honor `NO_FASTFETCH` to disable, and the profile sets `FASTFETCH_SHOWN` guard to avoid duplicates.
+
+- VS Code Integrated Terminal not picking profile
+	- Confirm `$PROFILE` path matches `powershell/Microsoft.PowerShell_profile.ps1` copy destination.
+	- Re-run bootstrap to copy the profile and relaunch VS Code.
