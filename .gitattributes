@@ -7,5 +7,4 @@ powershell/Microsoft.PowerShell_profile.ps1 text eol=crlf
 # Shell scripts should stay LF
 *.sh text eol=lf
 
-# PowerShell scripts can be CRLF on Windows working tree; store LF in repo
-*.ps1 text eol=crlf
+# Other PowerShell scripts follow the default (LF in repo); Windows editors handle CRLF automatically

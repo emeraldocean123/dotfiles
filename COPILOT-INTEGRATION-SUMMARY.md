@@ -29,6 +29,13 @@ This repository is fully integrated with VS Code Copilot's experimental prompt f
   - Purpose: Guided bootstrap for Windows/Linux
   - Usage: `/bootstrap-dotfiles`
 
+### 4. VS Code Tasks
+
+- Tasks available under `.vscode/tasks.json`:
+  - Verify PowerShell Profile
+  - Validate OMP Theme (Windows)
+  - Validate OMP Theme (Linux)
+
 ## How to Use
 
 ### Automatic Application

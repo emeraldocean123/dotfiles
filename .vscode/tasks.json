@@ -5,6 +5,7 @@
       "label": "Verify PowerShell Profile",
       "type": "shell",
       "command": "pwsh -NoProfile -File powershell/Verify-Profile.ps1",
+  "options": { "cwd": "${workspaceFolder}" },
       "group": "test",
       "problemMatcher": []
     },
@@ -12,6 +13,7 @@
       "label": "Validate OMP Theme (Windows)",
       "type": "shell",
       "command": "pwsh -NoProfile -File scripts/check-theme.ps1",
+  "options": { "cwd": "${workspaceFolder}" },
       "group": "test",
       "problemMatcher": []
     },
@@ -19,6 +21,7 @@
       "label": "Validate OMP Theme (Linux)",
       "type": "shell",
       "command": "bash scripts/check-theme.sh",
+  "options": { "cwd": "${workspaceFolder}" },
       "group": "test",
       "problemMatcher": []
     }
