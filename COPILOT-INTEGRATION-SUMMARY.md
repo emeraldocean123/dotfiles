@@ -65,6 +65,15 @@ Ensure these VS Code settings are enabled:
 }
 ```
 
+### Try it
+
+- In VS Code, open Command Palette → "Tasks: Run Task" and run:
+  - "Verify PowerShell Profile"
+  - "Validate OMP Theme (Windows)" or "Validate OMP Theme (Linux)"
+- In Copilot Chat, run prompt commands:
+  - `/bootstrap-dotfiles`
+  - `/cleanup-powershell`
+
 ## Files Created
 
 1. **`.github/copilot-instructions.md`** - General repository guidelines
