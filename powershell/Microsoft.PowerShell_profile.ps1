@@ -5,7 +5,10 @@ $repoBootstrap = Join-Path $HOME "Documents\dotfiles\powershell\profile.bootstra
 if (Test-Path $repoBootstrap) { . $repoBootstrap }
 
 # 2) Fastfetch (optional, once per session)
-if (-not (Get-Variable -Name FASTFETCH_SHOWN -Scope Global -ErrorAction SilentlyContinue)) {
+# Honor NO_FASTFETCH and set both a PowerShell and env guard
+$noFF = [string]::IsNullOrEmpty($env:NO_FASTFETCH)
+$shown = ($Global:FASTFETCH_SHOWN -eq $true) -or (-not [string]::IsNullOrEmpty($env:FASTFETCH_SHOWN))
+if ($noFF -and -not $shown) {
     if (Get-Command fastfetch -ErrorAction SilentlyContinue) {
         try {
             $ffsw = [System.Diagnostics.Stopwatch]::StartNew()
@@ -14,6 +17,7 @@ if (-not (Get-Variable -Name FASTFETCH_SHOWN -Scope Global -ErrorAction Silently
         } catch {}
     }
     $Global:FASTFETCH_SHOWN = $true
+    $env:FASTFETCH_SHOWN = '1'
 }
 
 # 3) Oh My Posh prompt
