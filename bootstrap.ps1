@@ -290,3 +290,12 @@ if ($AutoPush) {
 }
 
 Write-Ok "Bootstrap complete."
+
+# Next steps hint
+Write-Info "\nNext steps:"
+Write-Info "  - Verify profile: powershell/Verify-Profile.ps1"
+if ($OnWindows) {
+    Write-Info "  - Validate theme (Windows): scripts/check-theme.ps1"
+} elseif ($OnLinux) {
+    Write-Info "  - Validate theme (Linux): scripts/check-theme.sh"
+}

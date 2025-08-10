@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Verify PowerShell Profile",
+      "type": "shell",
+      "command": "pwsh -NoProfile -File powershell/Verify-Profile.ps1",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Validate OMP Theme (Windows)",
+      "type": "shell",
+      "command": "pwsh -NoProfile -File scripts/check-theme.ps1",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Validate OMP Theme (Linux)",
+      "type": "shell",
+      "command": "bash scripts/check-theme.sh",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}
