@@ -72,6 +72,7 @@ In VS Code, you can run these tasks from the Command Palette (Ctrl+Shift+P → "
 - **Verify Dotfiles (Linux)** - runs consolidated Linux verification
 - **Lint PowerShell (PSScriptAnalyzer)** - lints PowerShell scripts and modules (excludes vendored PSReadLine)
  - **Lint PowerShell (CI format)** - same lint but with plain output + VS Code Problems integration
+ - **Lint PowerShell (baseline)** - runs lint without custom settings (useful for quick triage)
 
 For Copilot users, enable prompt files:
 ```json
@@ -94,3 +95,4 @@ Editor/IDE
 - `.editorconfig` enforces consistent basics (LF, UTF-8, 2/4-space indents)
 - VS Code: recommended extensions in `.vscode/extensions.json`
  - PSScriptAnalyzer settings: tune rules in `PSScriptAnalyzerSettings.psd1` (pass -NoSettings to ignore)
+ - CI artifacts: manual workflow uploads `pssa-linux.txt` and `pssa-windows.txt` for download

@@ -64,6 +64,28 @@
       ]
     },
     {
+      "label": "Lint PowerShell (baseline)",
+      "type": "shell",
+      "command": "pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored -NoSettings -CI",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "problemMatcher": [
+        {
+          "owner": "pssa",
+          "fileLocation": "absolute",
+          "pattern": {
+            "regexp": "^(.+?):(\\d+):(\\d+): (error|warning|info) ([^:]+): (.+)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "code": 5,
+            "message": 6
+          }
+        }
+      ]
+    },
+    {
       "label": "Lint PowerShell (CI format)",
       "type": "shell",
       "command": "pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored -CI",
