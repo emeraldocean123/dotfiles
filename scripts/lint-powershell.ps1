@@ -18,7 +18,9 @@ Import-Module PSScriptAnalyzer -ErrorAction Stop
 
 $paths = Get-ChildItem -Path $Path -Recurse -Include *.ps1,*.psm1 -File | Select-Object -ExpandProperty FullName
 if ($ExcludeVendored) {
-  $paths = $paths | Where-Object { $_ -notmatch "modules\\PSReadLine\\" }
+  $paths = $paths | Where-Object {
+    ($_.Replace('\\','/')) -notmatch '/modules/PSReadLine/'
+  }
 }
 
 if (-not $paths) {
