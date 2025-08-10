@@ -13,6 +13,14 @@ jobs:
         run: bash scripts/check-theme.sh
       - name: Verify dotfiles (Linux)
         run: bash scripts/verify-dotfiles.sh
+      - name: Install PSScriptAnalyzer (Linux)
+        shell: pwsh
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
+      - name: Lint PowerShell (PSScriptAnalyzer on Linux)
+        shell: pwsh
+        run: pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored
 
   windows:
     runs-on: windows-latest
@@ -28,3 +36,9 @@ jobs:
         run: pwsh -NoProfile -File powershell/Verify-Profile.ps1
       - name: Verify dotfiles (Windows)
         run: pwsh -NoProfile -File scripts/verify-dotfiles.ps1
+      - name: Install PSScriptAnalyzer (Windows)
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
+      - name: Lint PowerShell (PSScriptAnalyzer on Windows)
+        run: pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored
