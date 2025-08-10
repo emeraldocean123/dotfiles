@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "[pre-commit] Running Nix formatting..."
+
+if command -v nix >/dev/null 2>&1; then
+  nix fmt
+  if ! git diff --quiet --exit-code; then
+    echo "[pre-commit] Formatting changed files; please review and re-stage:" >&2
+    git --no-pager diff --name-only >&2
+    exit 1
+  fi
+else
+  echo "[pre-commit] nix not found; skipping nix fmt" >&2
+fi
+
+exit 0

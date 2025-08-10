@@ -1,4 +1,6 @@
 # This is the single source of truth for Joseph's cross-platform shell environment.
+# home.nix (dotfiles)
+# Home Manager module defining shared shell packages and theme link
 { pkgs, ... }:
 {
   # Set home-manager state version

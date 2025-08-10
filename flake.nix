@@ -1,3 +1,5 @@
+## flake.nix (dotfiles)
+# Home Manager module and formatter for cross-platform dotfiles
 {
   description = "Joseph's cross-platform dotfiles, managed by Nix Home Manager";
 
@@ -8,6 +10,7 @@
   };
 
   outputs = { self, nixpkgs, home-manager }: {
+    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
     # This output can be imported by other flakes (like your nixos-config)
     homeManagerModules.default = {
       imports = [ ./home.nix ];

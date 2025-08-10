@@ -15,6 +15,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+.logs/
 
 # PowerShell specific
 LastExecutionTime.txt

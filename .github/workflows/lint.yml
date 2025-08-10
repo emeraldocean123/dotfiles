@@ -1,0 +1,20 @@
+name: Nix format (dotfiles)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+
+      - name: Format Nix files (nix fmt)
+        run: |
+          nix fmt
+          git diff --exit-code
