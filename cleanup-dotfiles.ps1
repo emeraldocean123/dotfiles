@@ -98,7 +98,7 @@ $Candidates | ForEach-Object { ("{0},{1}" -f (Get-RelPath $_.FullName),$_.Length
 $removed = 0L; $removedBytes = 0L
 if ($Apply) {
     foreach ($c in $Candidates) {
-    $rel = Get-RelPath $c.FullName
+        $rel = Get-RelPath $c.FullName
         if ($PSCmdlet.ShouldProcess($c.FullName, 'Remove')) {
             try {
                 $len = $c.Length
