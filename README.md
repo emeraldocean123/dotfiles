@@ -83,6 +83,22 @@ For Copilot users, enable prompt files:
 ```
 Then use `/bootstrap-dotfiles` and `/cleanup-powershell` prompts.
 
+## Common Aliases
+
+These aliases are configured across all platforms (PowerShell, Bash, NixOS):
+
+| Alias | Description | Command |
+|-------|-------------|---------|
+| `ll` | Detailed listing with hidden files | `ls -la` |
+| `la` | Same as ll | `ls -la` |
+| `gs` | Git status | `git status` |
+| `ga` | Git add | `git add` |
+| `gc` | Git commit | `git commit` |
+| `gp` | Git push | `git push` |
+| `gl` | Last 10 git commits | `git log --oneline -10` |
+| `gd` | Git diff | `git diff` |
+| `..` | Go up one directory | `cd ..` |
+
 ## Formatting (optional)
 
 If you have Nix:

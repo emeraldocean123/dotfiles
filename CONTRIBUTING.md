@@ -23,7 +23,7 @@ If Nix isn’t installed locally (Windows), the hook will no-op.
 
 - Keep scripts idempotent and safe (no destructive defaults)
 - Prefer informative output with Write-Host helpers
-- Follow the vendored PSReadLine pattern (see powershell/profile.bootstrap.ps1)
+- Follow the vendored PSReadLine pattern (see powershell/Microsoft.PowerShell_profile.ps1)
 - Honor fastfetch guards (`NO_FASTFETCH`, `FASTFETCH_SHOWN`) to avoid duplicate banners
 
 ## Header comment convention
