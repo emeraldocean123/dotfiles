@@ -1,5 +1,8 @@
 # === Unified Bash RC for non-NixOS environments (e.g., Git Bash, WSL) ===
 
+# Configuration
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/Documents/dotfiles}"
+
 # History settings
 HISTCONTROL=ignoreboth
 HISTSIZE=1000
@@ -45,9 +48,9 @@ if [ -z "$__FASTFETCH_SHOWN" ] && [ -n "$PS1" ]; then
   fi
 fi
 
-# --- Oh My Posh Initialization (using absolute path) ---
+# --- Oh My Posh Initialization (using configurable path) ---
 if command -v oh-my-posh &> /dev/null; then
-  THEME_PATH="$HOME/Documents/dotfiles/posh-themes/jandedobbeleer.omp.json"
+  THEME_PATH="$DOTFILES_DIR/posh-themes/jandedobbeleer.omp.json"
   if [ -f "$THEME_PATH" ]; then
     eval "$(oh-my-posh init bash --config "$THEME_PATH")"
   fi

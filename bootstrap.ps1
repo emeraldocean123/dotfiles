@@ -11,6 +11,9 @@ function Write-Ok($msg){ Write-Host $msg -ForegroundColor Green }
 function Write-Warn($msg){ Write-Warning $msg }
 function Write-Err($msg){ Write-Host $msg -ForegroundColor Red }
 
+# NOTE: Future refactoring opportunity - this script could be broken into functions like:
+# Install-Prerequisites, Configure-PSReadLine, Copy-ProfileWithBackup, Configure-SshAgent
+
 # -------------------------------
 # Pinned versions / constants
 # -------------------------------
@@ -18,6 +21,7 @@ $PinnedPSReadLineVersion = '2.4.1'   # change here if/when you bump
 $RequiredModules = @('Terminal-Icons','z')  # PSReadLine handled specially
 
 Write-Info "Starting PowerShell dotfiles setup..."
+Write-Info "=" * 50
 
 # -------------------------------
 # Detect platform / paths
