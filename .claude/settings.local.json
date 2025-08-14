@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "C:\\Users\\josep\\Documents\\nixos-config",
+      "C:\\Users\\josep\\Documents\\docs",
+      "C:\\Users\\josep\\Documents\\bookmark-cleaner"
+    ]
+  }
+}
