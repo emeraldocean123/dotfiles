@@ -24,11 +24,18 @@ Cross‑platform shell, prompt, and tooling configuration for Bash and PowerShel
 	- Use this repo as a flake input from your system flake (see `nixos-config`).
 	- Reference the theme via `inputs.dotfiles.outPath + "/posh-themes/jandedobbeleer.omp.json"`.
 
-### Verify (PowerShell)
-- After bootstrap, run `powershell/Verify-Profile.ps1` to check:
-	- PSReadLine version is 2.4.1 (vendored)
-	- Oh My Posh is available and theme path resolves
+### Verify
+- After bootstrap, run validation:
+	- PowerShell: `scripts/validate-environment.ps1 -PowerShell`
+	- Theme only: `scripts/validate-environment.ps1 -Theme`
+	- SSH connectivity: `scripts/validate-environment.ps1 -SSH`
+	- Everything: `scripts/validate-environment.ps1 -All`
 	- Fastfetch guards are set to avoid duplicate banners
+
+### SSH Utilities
+- Test connectivity: `scripts/ssh/test-ssh-connectivity.ps1 -All`
+- Connect to host: `scripts/ssh/connect-host.ps1 hp` (or msi, nas, proxmox, etc.)
+- Interactive session: `scripts/ssh/connect-host.ps1 msi -Interactive`
 
 ## Troubleshooting
 
