@@ -4,13 +4,23 @@ Cross‑platform shell, prompt, and tooling configuration for Bash and PowerShel
 
 ## Structure (key paths)
 
+### Core Shell Configuration
 - PowerShell profiles: `powershell/Microsoft.PowerShell_profile.ps1` (boots vendored PSReadLine; sets Oh My Posh)
 - Pinned PSReadLine (vendored): `modules/PSReadLine/2.4.1/`
 - Unified Oh My Posh theme (single source of truth): `posh-themes/jandedobbeleer.omp.json`
-- Claude Code configuration: `claude/settings.json`, `claude/claude_desktop_config.json`
-- VS Code workspace: `vscode/joseph.code-workspace`
 - Bootstrap scripts: `bootstrap.ps1` (Windows), `bootstrap.sh` (Linux)
 - Nix/Home Manager bits: `flake.nix`, `home.nix`
+
+### Application Configurations
+- Claude Code configuration: `claude/settings.json`, `claude/claude_desktop_config.json`
+- VS Code workspace: `vscode/joseph.code-workspace`
+- VS Code settings: `configs/vscode/settings.json`
+- Git configuration: `git/gitconfig`
+- SSH configuration: `ssh/config`
+
+### Utility Scripts
+- OBS backup scripts: `scripts/obs-backup/`
+- Setup utilities: Various setup and maintenance scripts
 
 ## Try it
 

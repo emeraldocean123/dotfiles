@@ -1,0 +1,9 @@
+[user]
+	name = Joseph
+	email = emeraldocean123@users.noreply.github.com
+[pull]
+	rebase = true
+[core]
+	sshCommand = C:\\Windows\\System32\\OpenSSH\\ssh.exe
+[gui]
+	recentrepo = C:/Users/josep/Documents/nixos-config
