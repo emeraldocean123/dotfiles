@@ -1,0 +1,51 @@
+{
+	"folders": [
+		{
+			"name": "📋 bookmark-cleaner",
+			"path": "../bookmark-cleaner"
+		},
+		{
+			"name": "🔧 dotfiles",
+			"path": "../dotfiles"
+		},
+		{
+			"name": "🐧 nixos-config",
+			"path": "../nixos-config"
+		},
+		{
+			"name": "📚 docs",
+			"path": "../docs"
+		}
+	],
+	"settings": {
+		"python.defaultInterpreterPath": "python",
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": true,
+		"files.exclude": {
+			"**/.git": false,
+			"**/__pycache__": true,
+			"**/*.pyc": true,
+			"**/node_modules": true
+		},
+		"git.enableSmartCommit": true,
+		"git.confirmSync": false,
+		"editor.formatOnSave": true,
+		"editor.insertSpaces": true,
+		"editor.detectIndentation": true,
+		"files.trimTrailingWhitespace": true,
+		"files.insertFinalNewline": true,
+		"claude.enableAutoSave": true,
+		"claude.projectContext": "Multi-repository workspace for system configuration and tools",
+		"terminal.integrated.cwd": "C:\\Users\\josep"
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-python.python",
+			"ms-vscode.powershell",
+			"jnoortheen.nix-ide",
+			"ms-vscode.vscode-json",
+			"redhat.vscode-yaml",
+			"ms-vscode.claude-code"
+		]
+	}
+}

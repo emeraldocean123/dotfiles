@@ -7,6 +7,8 @@ Cross‑platform shell, prompt, and tooling configuration for Bash and PowerShel
 - PowerShell profiles: `powershell/Microsoft.PowerShell_profile.ps1` (boots vendored PSReadLine; sets Oh My Posh)
 - Pinned PSReadLine (vendored): `modules/PSReadLine/2.4.1/`
 - Unified Oh My Posh theme (single source of truth): `posh-themes/jandedobbeleer.omp.json`
+- Claude Code configuration: `claude/settings.json`, `claude/claude_desktop_config.json`
+- VS Code workspace: `vscode/joseph.code-workspace`
 - Bootstrap scripts: `bootstrap.ps1` (Windows), `bootstrap.sh` (Linux)
 - Nix/Home Manager bits: `flake.nix`, `home.nix`
 
@@ -23,6 +25,10 @@ Cross‑platform shell, prompt, and tooling configuration for Bash and PowerShel
 - NixOS/Home Manager:
 	- Use this repo as a flake input from your system flake (see `nixos-config`).
 	- Reference the theme via `inputs.dotfiles.outPath + "/posh-themes/jandedobbeleer.omp.json"`.
+
+- Claude Code:
+	- Run `setup-claude.ps1` to install Claude Code settings with custom status line and PowerShell 7 integration.
+	- See `claude/README.md` for detailed configuration information.
 
 ### Verify
 - After bootstrap, run validation:

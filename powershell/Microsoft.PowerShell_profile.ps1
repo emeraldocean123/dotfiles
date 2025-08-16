@@ -32,8 +32,9 @@ if (-not $omp) {
 }
 
 # Theme from dotfiles if available; otherwise default oh-my-posh init
+# Note: Oh My Posh can cause infinite loops in PowerShell 5.1, so we skip it for compatibility
 $themePath = Join-Path $HOME 'Documents\dotfiles\posh-themes\jandedobbeleer.omp.json'
-if ($omp) {
+if ($omp -and $PSVersionTable.PSVersion.Major -ge 6) {
     try {
         if (Test-Path $themePath) {
             oh-my-posh init pwsh --config $themePath | Invoke-Expression
@@ -43,6 +44,8 @@ if ($omp) {
     } catch {
         Write-Verbose "Oh My Posh init failed: $($_.Exception.Message)" -Verbose:$false
     }
+} elseif ($omp -and $PSVersionTable.PSVersion.Major -lt 6) {
+    Write-Host "Oh My Posh disabled for PowerShell 5.1 compatibility. Use PowerShell 7+ for full theme support." -ForegroundColor Yellow
 }
 
 # 4) Git helpers
