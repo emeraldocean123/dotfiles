@@ -72,7 +72,7 @@ if ($PowerShell -or $All) {
 if ($Theme -or $All) {
     Write-Section "Theme Configuration"
     
-    $themePath = Join-Path $HOME 'Documents\dotfiles\posh-themes\jandedobbeleer.omp.json'
+    $themePath = Join-Path $HOME 'Documents\dev\dotfiles\posh-themes\jandedobbeleer.omp.json'
     if (Test-Path $themePath) {
         try {
             $themeContent = Get-Content $themePath -Raw | ConvertFrom-Json

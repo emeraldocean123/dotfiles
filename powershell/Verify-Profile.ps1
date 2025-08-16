@@ -21,7 +21,7 @@ if ($omp) {
 }
 
 # Theme path
-$themePath = Join-Path $HOME 'Documents\dotfiles\posh-themes\jandedobbeleer.omp.json'
+$themePath = Join-Path $HOME 'Documents\dev\dotfiles\posh-themes\jandedobbeleer.omp.json'
 if (Test-Path $themePath) {
   Write-Host ("Theme exists: {0}" -f $themePath)
 } else {

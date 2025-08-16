@@ -1,6 +1,6 @@
 # --- Bootstrap: Force vendored PSReadLine 2.4.1 before anything else ---
 try {
-    $DotfilesDir  = Join-Path $HOME "Documents\dotfiles"
+    $DotfilesDir  = Join-Path $HOME "Documents\dev\dotfiles"
     $VendoredPsd1 = Join-Path $DotfilesDir "modules\PSReadLine\2.4.1\PSReadLine.psd1"
 
     if (Test-Path -LiteralPath $VendoredPsd1) {

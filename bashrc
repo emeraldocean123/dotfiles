@@ -1,7 +1,7 @@
 # === Unified Bash RC for non-NixOS environments (e.g., Git Bash, WSL) ===
 
 # Configuration
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/Documents/dotfiles}"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/Documents/dev/dotfiles}"
 
 # History settings
 HISTCONTROL=ignoreboth

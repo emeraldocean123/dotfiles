@@ -37,10 +37,10 @@ if ($CustomDotfilesDir) {
     $DotfilesDir = $CustomDotfilesDir
 } elseif ($OnWindows) {
     $ProfileDir  = if ($PSVersionTable.PSVersion.Major -le 5) { "$env:USERPROFILE\Documents\WindowsPowerShell" } else { "$env:USERPROFILE\Documents\PowerShell" }
-    $DotfilesDir = "$env:USERPROFILE\Documents\dotfiles"
+    $DotfilesDir = "$env:USERPROFILE\Documents\dev\dotfiles"
 } else {
     $ProfileDir  = "$env:HOME/.config/powershell"
-    $DotfilesDir = "$env:HOME/Documents/dotfiles"
+    $DotfilesDir = "$env:HOME/Documents/dev/dotfiles"
 }
 $ProfilePath = Join-Path $ProfileDir 'Microsoft.PowerShell_profile.ps1'
 $BackupDir   = Join-Path $env:USERPROFILE ("dotfiles-backup-{0}" -f (Get-Date -Format 'yyyyMMdd-HHmmss'))

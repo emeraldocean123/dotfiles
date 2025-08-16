@@ -1,7 +1,7 @@
 # === Joseph PowerShell Profile (PSReadLine pin + OMP + fastfetch) ===
 
 # 1) Load bootstrap from repo (pins PSReadLine 2.4.1)
-$repoBootstrap = Join-Path $HOME "Documents\dotfiles\powershell\profile.bootstrap.ps1"
+$repoBootstrap = Join-Path $HOME "Documents\dev\dotfiles\powershell\profile.bootstrap.ps1"
 if (Test-Path $repoBootstrap) { . $repoBootstrap }
 
 # 2) Fastfetch (optional, once per session)
@@ -33,7 +33,7 @@ if (-not $omp) {
 
 # Theme from dotfiles if available; otherwise default oh-my-posh init
 # Note: Oh My Posh can cause infinite loops in PowerShell 5.1, so we skip it for compatibility
-$themePath = Join-Path $HOME 'Documents\dotfiles\posh-themes\jandedobbeleer.omp.json'
+$themePath = Join-Path $HOME 'Documents\dev\dotfiles\posh-themes\jandedobbeleer.omp.json'
 if ($omp -and $PSVersionTable.PSVersion.Major -ge 6) {
     try {
         if (Test-Path $themePath) {

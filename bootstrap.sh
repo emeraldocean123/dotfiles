@@ -2,7 +2,7 @@
 # Final, robust bootstrap script using COPY instead of symlinks.
 
 set -e
-DOTFILES_DIR_PATH="$HOME/Documents/dotfiles"
+DOTFILES_DIR_PATH="$HOME/Documents/dev/dotfiles"
 BASHRC_SOURCE_PATH="$DOTFILES_DIR_PATH/bashrc"
 BASHRC_TARGET_PATH="$HOME/.bashrc"
 BACKUP_DIR="$HOME/dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
