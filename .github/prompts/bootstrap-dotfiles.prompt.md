@@ -9,7 +9,7 @@ description: "Bootstrap dotfiles on Windows or Linux safely"
 You are tasked with bootstrapping this dotfiles repo on a new machine (Windows PowerShell or Linux Bash). Follow these steps, honoring the guardrails in `.github/copilot-instructions.md`.
 
 ## Phase 1: Assess
-1. Verify repo structure exists in `~/Documents/dotfiles` (Windows) or `~/Documents/dotfiles` (Linux)
+1. Verify repo structure exists in `~/Documents/dev/dotfiles` (Windows) or `~/Documents/dev/dotfiles` (Linux)
 2. Confirm key files:
    - `powershell/Microsoft.PowerShell_profile.ps1`
    - `posh-themes/jandedobbeleer.omp.json` (single source of truth)

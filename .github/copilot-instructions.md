@@ -20,7 +20,7 @@ This repository provides cross-platform shell, prompt, and tooling configuration
 ## Unified prompt and theme
 
 - Single theme file lives at `posh-themes/jandedobbeleer.omp.json`.
-- PowerShell profile loads it from `~/Documents/dotfiles/...` when present.
+- PowerShell profile loads it from `~/Documents/dev/dotfiles/...` when present.
 - NixOS/Home Manager references the same file via a flake input to this repo.
 
 ## Bootstrap & deployment

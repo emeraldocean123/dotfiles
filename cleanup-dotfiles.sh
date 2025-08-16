@@ -30,7 +30,7 @@ done
 
 if [[ ${#targets[@]} -eq 0 ]]; then
   echo "No targets provided. Examples:" >&2
-  echo "  $0 --targets /etc/nixos $HOME/dotfiles $HOME/Documents/dotfiles" >&2
+  echo "  $0 --targets /etc/nixos $HOME/dotfiles $HOME/Documents/dev/dotfiles" >&2
   exit 1
 fi
 

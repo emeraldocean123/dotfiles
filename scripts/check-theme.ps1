@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory=$false)][ValidateNotNullOrEmpty()]
-    [string]$ThemePath = "$HOME/Documents/dotfiles/posh-themes/jandedobbeleer.omp.json",
+    [string]$ThemePath = "$HOME/Documents/dev/dotfiles/posh-themes/jandedobbeleer.omp.json",
     [switch]$Quiet
 )
 

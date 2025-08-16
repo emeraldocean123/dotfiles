@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-THEME_PATH="${1:-$HOME/Documents/dotfiles/posh-themes/jandedobbeleer.omp.json}"
+THEME_PATH="${1:-$HOME/Documents/dev/dotfiles/posh-themes/jandedobbeleer.omp.json}"
 
 echo "Validating Oh My Posh theme..."
 if [[ ! -f "$THEME_PATH" ]]; then

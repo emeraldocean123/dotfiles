@@ -22,7 +22,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$RepoRoot = Join-Path $env:USERPROFILE 'Documents/dotfiles'
+$RepoRoot = Join-Path $env:USERPROFILE 'Documents/dev/dotfiles'
 if (-not (Test-Path $RepoRoot)) { throw "Repo not found: $RepoRoot" }
 
 $LogDir = Join-Path $RepoRoot '.logs'
