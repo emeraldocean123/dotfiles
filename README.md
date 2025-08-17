@@ -13,7 +13,7 @@ Cross‑platform shell, prompt, and tooling configuration for Bash and PowerShel
 
 ### Application Configurations
 - Claude Code configuration: `claude/settings.json`, `claude/claude_desktop_config.json`
-- VS Code workspace: `vscode/joseph.code-workspace`
+- VS Code workspace: `vscode/workspace.code-workspace`
 - VS Code settings: `configs/vscode/settings.json`
 - Git configuration: `git/gitconfig`
 - SSH configuration: `ssh/config`

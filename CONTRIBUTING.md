@@ -32,7 +32,7 @@ Start files with a short, clear header describing purpose. Avoid path-style head
 
 Example:
 ```
-# Joseph PowerShell profile (PSReadLine 2.4.1 + Oh My Posh)
+# PowerShell profile (PSReadLine 2.4.1 + Oh My Posh)
 ```
 
 ## PR checklist
