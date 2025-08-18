@@ -48,10 +48,23 @@ if ($omp -and $PSVersionTable.PSVersion.Major -ge 6) {
     Write-Host "Oh My Posh disabled for PowerShell 5.1 compatibility. Use PowerShell 7+ for full theme support." -ForegroundColor Yellow
 }
 
-# 4) Git helpers
+# 4) Git helpers (matches bash aliases)
 function gs { git status }
-function gl { git --no-pager log --oneline -n 20 }
-function gd { git --no-pager diff }
+function ga { git add @args }
+function gcom { git commit @args }
+function gp { git push @args }
+function gl { git --no-pager log --oneline -n 10 }  # Changed to -n 10 to match bash
+function gd { git --no-pager diff @args }
+
+# Directory navigation (matches bash aliases)
+function .. { Set-Location .. }
+function ... { Set-Location ../.. }
+function .... { Set-Location ../../.. }
+
+# Directory listing (matches bash aliases)
+function ll { Get-ChildItem -Force }  # Shows all files including hidden
+function la { Get-ChildItem -Force }  # Same as ll
+function l { Get-ChildItem }           # Normal listing without hidden files
 
 # 5) Quick Git path note and profile timing
 $git = (Get-Command git -ErrorAction SilentlyContinue).Source
