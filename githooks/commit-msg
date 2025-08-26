@@ -1,0 +1,45 @@
+#!/bin/sh
+# Conventional Commits enforcement
+# Allowed types: build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test
+
+set -e
+
+MSG_FILE="$1"
+[ -z "$MSG_FILE" ] && exit 0
+
+# Allow bypass
+[ "$GITHOOKS_BYPASS" = "1" ] && exit 0
+
+first_line=$(sed -n '1p' "$MSG_FILE" | tr -d '\r')
+
+# Allow merge commits and reverts
+case "$first_line" in
+  Merge\ *|Revert\ *|release\ *|Release\ *|Version\ *|v[0-9]*.*)
+    exit 0 ;;
+esac
+
+# Conventional Commit pattern
+# type(scope)!?: subject
+regex='^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-zA-Z0-9_.\-\/]+\))?(!)?: .+'
+
+printf "%s" "$first_line" | grep -Eq "$regex" && ok=1 || ok=0
+
+if [ "$ok" -ne 1 ]; then
+  echo "commit-msg: Commit message does not follow Conventional Commits." >&2
+  echo "First line should be: type(scope)?: subject" >&2
+  echo "Examples:" >&2
+  echo "  feat(parser): add color support" >&2
+  echo "  fix: handle null input" >&2
+  echo "  chore(ci)!: drop Node 14 support" >&2
+  echo "Original: $first_line" >&2
+  echo "Set GITHOOKS_BYPASS=1 to bypass (not recommended)." >&2
+  exit 1
+fi
+
+# Optional: warn if subject > 72 chars (soft)
+len=$(printf "%s" "$first_line" | wc -c | tr -d ' ')
+if [ "$len" -gt 72 ]; then
+  echo "commit-msg: warning: subject line is >72 chars ($len)." >&2
+fi
+
+exit 0

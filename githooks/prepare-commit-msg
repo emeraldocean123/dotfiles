@@ -1,0 +1,36 @@
+#!/bin/sh
+# Add helpful Conventional Commit suggestions without modifying the message
+# Usage: prepare-commit-msg <msg-file> <source> <sha>
+set -e
+
+MSG_FILE="$1"
+SRC="$2"
+
+# Skip for merges, squash, or when message already has non-comment content
+case "$SRC" in
+  merge|squash|commit) : ;; # continue
+esac
+
+has_content() {
+  grep -qE '^[^#[:space:]].*' "$MSG_FILE"
+}
+
+# Derive suggested type and scopes
+FILES=$(git diff --cached --name-only)
+top_dirs=$(printf '%s\n' "$FILES" | awk -F/ '{print $1}' | sed '/^$/d' | sort -u | tr '\n' ',' | sed 's/,$//')
+
+suggest_type="feat|fix|docs|chore|refactor|test|perf|ci|build|style"
+
+# Ensure a blank line before suggestions so they land in the body
+echo "" >> "$MSG_FILE"
+{
+  echo "# Conventional Commits: type(scope)?: subject"
+  echo "# Types: $suggest_type"
+  [ -n "$top_dirs" ] && echo "# Scopes (suggested): $top_dirs"
+  echo "# Examples:"
+  echo "#   feat(parser): add color support"
+  echo "#   fix: handle null input"
+  echo "#   chore(ci)!: drop Node 14 support"
+} >> "$MSG_FILE"
+
+exit 0

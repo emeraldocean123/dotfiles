@@ -1,0 +1,80 @@
+#!/bin/sh
+set -e
+
+# Ensure predictable word splitting
+IFS='\n'
+
+FILES="$(git diff --cached --name-only)"
+
+block() { echo "pre-commit: $1" >&2; exit 1; }
+
+# Block committing private keys by filename
+printf "%s\n" "$FILES" | grep -Eqi '(^|/)(id_rsa|id_ed25519|.*\.pem|.*\.ppk)$' && \
+  block "Attempting to commit private key material. Remove these files from the commit."
+
+# Block committing .env files
+printf "%s\n" "$FILES" | grep -Eq '(^|/)\.env(\.|$|$)' && \
+  block "Attempting to commit .env files."
+
+# If repo uses Bun, block package-lock.json
+if [ -f bun.lock ]; then
+  printf "%s\n" "$FILES" | grep -Eq '(^|/)package-lock\.json$' && \
+    block "Detected bun.lock; do not commit npm's package-lock.json. Remove it from index."
+fi
+
+# Block very large files (>5MB) accidentally staged
+max=5242880
+oversized=$(git diff --cached --name-only | while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  size=$(wc -c <"$f" 2>/dev/null || echo 0)
+  [ "$size" -gt "$max" ] && echo "$f:$size"
+done)
+if [ -n "$oversized" ]; then
+  echo "pre-commit: blocking large files >5MB:" >&2
+  echo "$oversized" >&2
+  exit 1
+fi
+
+# Lightweight secret scanning on staged content with allowlist support
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+ALLOW_FILE="$REPO_ROOT/.githooks-allow.txt"
+ALLOW_TMP=""
+if [ -f "$ALLOW_FILE" ]; then
+  ALLOW_TMP=$(mktemp 2>/dev/null || echo "$REPO_ROOT/.githooks-allow.tmp")
+  # Strip comments/blank lines
+  sed -e 's/#.*$//' -e '/^\s*$/d' "$ALLOW_FILE" > "$ALLOW_TMP" 2>/dev/null || true
+fi
+
+is_allowed() {
+  [ -n "$ALLOW_TMP" ] && printf "%s\n" "$1" | grep -Ei -f "$ALLOW_TMP" >/dev/null 2>&1
+}
+
+flagged=""
+for f in $FILES; do
+  # Skip if removed or not a file in index
+  git ls-files --error-unmatch -- "$f" >/dev/null 2>&1 || continue
+  # Skip if path matches allowlist
+  if is_allowed "$f"; then
+    continue
+  fi
+  # Pull staged content and test common patterns
+  content=$(git show ":$f" 2>/dev/null || true)
+  [ -z "$content" ] && continue
+  echo "$content" | grep -qE '-----BEGIN [A-Z ]*PRIVATE KEY-----' && flagged="$flagged\n$f: private key block"
+  echo "$content" | grep -qiE 'aws_?(secret|access)[-_ ]?(key|token)\s*[:=]' && flagged="$flagged\n$f: aws secret/access key literal"
+  echo "$content" | grep -qE '\b(AKIA|ASIA|AGPA|AIDA|ANPA|AROA|AIPA|ANVA)[0-9A-Z]{16}\b' && flagged="$flagged\n$f: aws access key id"
+  echo "$content" | grep -qE '\bgh[pousr]_[0-9A-Za-z]{36,}\b' && flagged="$flagged\n$f: github token"
+  echo "$content" | grep -qE '\bAIza[0-9A-Za-z\-_]{35}\b' && flagged="$flagged\n$f: google api key"
+  echo "$content" | grep -qE '\bxox[baprs]-[0-9A-Za-z-]{10,}\b' && flagged="$flagged\n$f: slack token"
+done
+
+if [ -n "$flagged" ]; then
+  echo "pre-commit: possible secrets detected in staged content:" >&2
+  printf "%s\n" "$flagged" | sed '/^$/d' >&2
+  echo "If these are false positives, consider adding safer patterns or use a secret manager." >&2
+  exit 1
+fi
+
+if [ -n "$ALLOW_TMP" ] && [ -f "$ALLOW_TMP" ]; then rm -f "$ALLOW_TMP" 2>/dev/null || true; fi
+
+exit 0
