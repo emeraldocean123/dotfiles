@@ -150,6 +150,10 @@ Editor/IDE
   - `open-debian-nixos-config.ps1`: launches Debian WSL in `~/projects/nixos-config`.
 - See `CODEX.md` and `CLAUDE.md` for the unified workspace guide used by both assistants.
 
+## Review Routing
+
+- This repo uses CODEOWNERS; PRs request review from `@emeraldocean123` automatically.
+
 ## Contributing
 
 - Use Conventional Commits for all messages: `type(scope)?: subject`.
