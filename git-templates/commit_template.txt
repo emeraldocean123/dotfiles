@@ -1,0 +1,21 @@
+# Conventional Commit format: type(scope)?: short summary
+# Allowed types: build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test
+# Examples:
+#   feat(parser): add color support
+#   fix: handle null input
+#   chore(ci)!: drop Node 14 support
+
+
+# Body (motivation/contrast):
+# - What changed and why
+# - Links to issues/PRs
+
+# Changelog (optional bullets):
+# - Added:
+# - Changed:
+# - Fixed:
+# - Removed:
+
+# Footer (breaking-change, closes):
+# BREAKING CHANGE: describe impact and migration
+# Closes: #123

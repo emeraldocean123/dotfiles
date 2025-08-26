@@ -135,3 +135,10 @@ Editor/IDE
 - VS Code: recommended extensions in `.vscode/extensions.json`
  - PSScriptAnalyzer settings: tune rules in `PSScriptAnalyzerSettings.psd1` (pass -NoSettings to ignore)
  - CI artifacts: manual workflow uploads `pssa-linux.txt` and `pssa-windows.txt` for download
+## Conventional Commits & Hooks
+
+- Commit Template: this repo ships a shared template at `git-templates/commit_template.txt`. Your global Git is configured to use it automatically. Run `git commit` and fill the header `type(scope)?: subject` following Conventional Commits.
+- Shared Hooks: global `core.hooksPath` points to `Documents/dev/dotfiles/githooks`.
+  - `pre-commit`: blocks private keys, `.env*`, package-lock.json (when `bun.lock` exists), files > 5MB, and scans for common secrets. Add regex entries to `.githooks-allow.txt` to suppress known safe files.
+  - `commit-msg`: enforces Conventional Commits. Set `GITHOOKS_BYPASS=1` to bypass once (not recommended).
+- New repos: inherit hooks via the global `core.hooksPath`; nothing extra to configure.
