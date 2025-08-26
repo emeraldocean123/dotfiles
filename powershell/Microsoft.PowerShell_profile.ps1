@@ -1,4 +1,4 @@
-# === Joseph PowerShell Profile (PSReadLine pin + OMP + fastfetch) ===
+# === PowerShell Profile (PSReadLine pin + OMP + fastfetch) ===
 
 # 1) Load bootstrap from repo (pins PSReadLine 2.4.1)
 $repoBootstrap = Join-Path $HOME "Documents\dev\dotfiles\powershell\profile.bootstrap.ps1"

@@ -142,3 +142,10 @@ Editor/IDE
   - `pre-commit`: blocks private keys, `.env*`, package-lock.json (when `bun.lock` exists), files > 5MB, and scans for common secrets. Add regex entries to `.githooks-allow.txt` to suppress known safe files.
   - `commit-msg`: enforces Conventional Commits. Set `GITHOOKS_BYPASS=1` to bypass once (not recommended).
 - New repos: inherit hooks via the global `core.hooksPath`; nothing extra to configure.
+
+## Contributing
+
+- Use Conventional Commits for all messages: `type(scope)?: subject`.
+- Commit Template: this repo is configured with a commit message template to guide messages.
+- Hooks: shared `pre-commit` and `commit-msg` hooks run automatically (configured via global `core.hooksPath`).
+- Bypass (rare): set `GITHOOKS_BYPASS=1` to skip checks once.
