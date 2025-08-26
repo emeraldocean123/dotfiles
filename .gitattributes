@@ -1,10 +1,15 @@
-# Normalize line endings committed to Git
 * text=auto eol=lf
 
-# Keep Windows PowerShell profile CRLF in working tree on Windows while storing LF
-powershell/Microsoft.PowerShell_profile.ps1 text eol=crlf
+# Windows shell scripts
+*.ps1 text eol=crlf
+*.psm1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
 
-# Shell scripts should stay LF
+# Unixy files
 *.sh text eol=lf
-
-# Other PowerShell scripts follow the default (LF in repo); Windows editors handle CRLF automatically
+*.nix text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf

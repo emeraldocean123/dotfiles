@@ -143,6 +143,13 @@ Editor/IDE
   - `commit-msg`: enforces Conventional Commits. Set `GITHOOKS_BYPASS=1` to bypass once (not recommended).
 - New repos: inherit hooks via the global `core.hooksPath`; nothing extra to configure.
 
+## WSL + Nix Bootstrap
+
+- Scripts live in `Documents/dev/scripts/wsl/`:
+  - `bootstrap-nix-debian.sh`: enables flakes, installs Nix, reuses unified SSH key, clones `nixos-config`, runs `nix flake check`.
+  - `open-debian-nixos-config.ps1`: launches Debian WSL in `~/projects/nixos-config`.
+- See `CODEX.md` and `CLAUDE.md` for the unified workspace guide used by both assistants.
+
 ## Contributing
 
 - Use Conventional Commits for all messages: `type(scope)?: subject`.
