@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: lycheeverse/lychee-action@v1
+      - uses: lycheeverse/lychee-action@v2
         with:
           args: --no-progress --verbose --exclude-mail --max-redirects 5 --retry-wait-time 2 --timeout 30s .
         env:
