@@ -11,18 +11,22 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager }: {
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+  }: {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
     # This output can be imported by other flakes (like your nixos-config)
     homeManagerModules.default = {
-      imports = [ ./home.nix ];
+      imports = [./home.nix];
     };
 
     # This allows you to run `home-manager switch --flake .#joseph@hostname` on non-NixOS machines
     homeConfigurations.joseph = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      extraSpecialArgs = { };
-      modules = [ ./home.nix ];
+      extraSpecialArgs = {};
+      modules = [./home.nix];
     };
   };
 }
