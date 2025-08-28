@@ -1,8 +1,24 @@
 {
 	"folders": [
 		{
+			"name": "🤖 bmad-agents-library",
+			"path": "../../../bmad-agents"
+		},
+		{
+			"name": "🤖 bmad-method",
+			"path": "../../../bmad-method"
+		},
+		{
 			"name": "📋 bookmark-cleaner",
 			"path": "../../../bookmark-cleaner"
+		},
+		{
+			"name": "🛠️ maintenance",
+			"path": "../../../maintenance"
+		},
+		{
+			"name": "📚 docs",
+			"path": "../../../docs"
 		},
 		{
 			"name": "🔧 dotfiles",
@@ -11,22 +27,6 @@
 		{
 			"name": "🐧 nixos-config",
 			"path": "../../../nixos-config"
-		},
-		{
-			"name": "📚 docs",
-			"path": "../../../docs"
-		},
-		{
-			"name": "🤖 bmad-method",
-			"path": "../../../bmad-method"
-		},
-		{
-			"name": "🛠️ dev-maintenance",
-			"path": "../../../maintenance"
-		},
-		{
-			"name": "🤖 bmad-agents-library",
-			"path": "../../../bmad-agents"
 		}
 	],
 	"settings": {
