@@ -27,7 +27,7 @@ Contains VS Code configuration including:
 
 ## OBS Studio (Future)
 
-OBS Studio configurations are currently being backed up by scripts in `scripts/obs-backup/` but profile and scene files could be managed here in the future if needed.
+OBS Studio configurations are currently backed up by the shared automation in `~/Documents/dev/shared/scripts/backup/` but profile and scene files could be managed here in the future if needed.
 
 ## Installation
 

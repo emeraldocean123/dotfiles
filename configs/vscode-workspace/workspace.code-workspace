@@ -53,7 +53,8 @@
 		"files.insertFinalNewline": true,
 		"claude.enableAutoSave": true,
 		"claude.projectContext": "Multi-repository workspace for system configuration and tools",
-		"terminal.integrated.cwd": "C:\\Users\\josep"
+		"terminal.integrated.cwd": "C:\\Users\\josep",
+		"chatgpt.openOnStartup": false
 	},
 	"extensions": {
 		"recommendations": [

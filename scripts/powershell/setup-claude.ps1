@@ -4,34 +4,39 @@ $ErrorActionPreference = 'Stop'
 
 Write-Host "Setting up Claude Code configuration..." -ForegroundColor Cyan
 
-# Create .claude directory if it doesn't exist
 $claudeDir = Join-Path $HOME ".claude"
 if (-not (Test-Path $claudeDir)) {
     New-Item -ItemType Directory -Path $claudeDir -Force | Out-Null
     Write-Host "Created $claudeDir directory" -ForegroundColor Green
 }
 
-# Copy Claude settings
-$dotfilesClaudeDir = Join-Path $PSScriptRoot "claude"
-$settingsSource = Join-Path $dotfilesClaudeDir "settings.json"
-$settingsTarget = Join-Path $claudeDir "settings.json"
+$sharedClaudeDir = Join-Path $HOME "Documents/dev/shared/configs/claude"
+$legacyClaudeDir = Join-Path $PSScriptRoot "claude"
 
-if (Test-Path $settingsSource) {
-    Copy-Item $settingsSource $settingsTarget -Force
-    Write-Host "Copied Claude Code settings.json" -ForegroundColor Green
+if (Test-Path $sharedClaudeDir) {
+    $sourceDir = $sharedClaudeDir
+} elseif (Test-Path $legacyClaudeDir) {
+    $sourceDir = $legacyClaudeDir
+    Write-Warning "Using legacy claude/ directory in dotfiles; consider migrating to shared/configs."
 } else {
-    Write-Warning "Claude settings.json not found in dotfiles"
+    throw "Claude configuration files not found. Expected $sharedClaudeDir"
 }
 
-# Copy Claude desktop config  
-$configSource = Join-Path $dotfilesClaudeDir "claude_desktop_config.json"
-$configTarget = Join-Path $claudeDir "claude_desktop_config.json"
+$files = @(
+    @{ Name = "settings.json"; Target = "settings.json" },
+    @{ Name = "settings.local.json"; Target = "settings.local.json" },
+    @{ Name = "claude_desktop_config.json"; Target = "claude_desktop_config.json" },
+    @{ Name = "claude_code_settings.json"; Target = "claude_code_settings.json" },
+    @{ Name = "statusline.ps1"; Target = "statusline.ps1" }
+)
 
-if (Test-Path $configSource) {
-    Copy-Item $configSource $configTarget -Force
-    Write-Host "Copied Claude desktop config" -ForegroundColor Green
-} else {
-    Write-Warning "Claude desktop config not found in dotfiles"
+foreach ($file in $files) {
+    $source = Join-Path $sourceDir $file.Name
+    $target = Join-Path $claudeDir $file.Target
+    if (Test-Path $source) {
+        Copy-Item $source $target -Force
+        Write-Host "Copied $($file.Name)" -ForegroundColor Green
+    }
 }
 
 Write-Host "Claude Code configuration setup complete!" -ForegroundColor Green

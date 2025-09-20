@@ -1,87 +1,97 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Format: Nix (current project)",
-      "type": "shell",
-      "command": "nix fmt",
-      "group": "build",
-      "problemMatcher": [],
-      "options": { "cwd": "${workspaceFolder}" }
-    },
-    {
-      "label": "Lint: PowerShell (current project)",
-      "type": "shell",
-      "command": "pwsh -NoProfile -File scripts/lint-powershell.ps1 -ExcludeVendored -CI",
-      "group": "test",
-      "options": { "cwd": "${workspaceFolder}" },
-      "problemMatcher": [
+    "version": "2.0.0",
+    "tasks": [
         {
-          "owner": "pssa",
-          "fileLocation": "absolute",
-          "pattern": {
-            "regexp": "^(.+?):(\\d+):(\\d+): (error|warning|info) ([^:]+): (.+)$",
-            "file": 1,
-            "line": 2,
-            "column": 3,
-            "severity": 4,
-            "code": 5,
-            "message": 6
-          }
+            "label": "Format: Nix (current project)",
+            "type": "shell",
+            "command": "nix fmt",
+            "group": "build",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Lint: PowerShell (current project)",
+            "type": "shell",
+            "command": "pwsh -NoProfile -File scripts/powershell/lint-powershell.ps1 -ExcludeVendored -CI",
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                {
+                    "owner": "pssa",
+                    "fileLocation": "absolute",
+                    "pattern": {
+                        "regexp": "^(.+?):(\\d+):(\\d+): (error|warning|info) ([^:]+): (.+)$",
+                        "file": 1,
+                        "line": 2,
+                        "column": 3,
+                        "severity": 4,
+                        "code": 5,
+                        "message": 6
+                    }
+                }
+            ]
+        },
+        {
+            "label": "Check: Nix Statix (current project)",
+            "type": "shell",
+            "command": "nix run nixpkgs#statix -- check",
+            "group": "test",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Verify: Dotfiles",
+            "type": "shell",
+            "command": "pwsh -NoProfile -File \"$env:USERPROFILE/Documents/dev/shared/scripts/validation/validate-environment.ps1\" -All",
+            "group": "test",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Validate: OMP Theme",
+            "type": "shell",
+            "command": "pwsh -NoProfile -File \"$env:USERPROFILE/Documents/dev/shared/scripts/validation/check-theme.ps1\"",
+            "group": "test",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "NixOS: Switch (HP)",
+            "type": "shell",
+            "command": "ssh -t joseph@192.168.1.104 'sudo git -C /etc/nixos pull --ff-only && sudo nixos-rebuild switch --flake /etc/nixos#hp-dv9500-pavilion-nixos'",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "NixOS: Switch (MSI)",
+            "type": "shell",
+            "command": "ssh -t joseph@192.168.1.106 'sudo git -C /etc/nixos pull --ff-only && sudo nixos-rebuild switch --flake /etc/nixos#msi-ge75-raider-nixos'",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "NixOS: Test (HP)",
+            "type": "shell",
+            "command": "ssh -t joseph@192.168.1.104 'sudo git -C /etc/nixos pull --ff-only && sudo nixos-rebuild test --flake /etc/nixos#hp-dv9500-pavilion-nixos'",
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
+            "label": "SSH: Test All Systems",
+            "type": "shell",
+            "command": "for host in opnsense nas proxmox wireguard tailscale omada netbox iventoy docker syncthing hp msi; do echo -n \"$host: \"; ssh -o ConnectTimeout=2 $host \"hostname\" 2>/dev/null || echo \"offline\"; done",
+            "group": "test",
+            "problemMatcher": []
         }
-      ]
-    },
-    {
-      "label": "Check: Nix Statix (current project)",
-      "type": "shell",
-      "command": "nix run nixpkgs#statix -- check",
-      "group": "test",
-      "problemMatcher": [],
-      "options": { "cwd": "${workspaceFolder}" }
-    },
-    {
-      "label": "Verify: Dotfiles",
-      "type": "shell",
-      "command": "pwsh -NoProfile -File scripts/verify-dotfiles.ps1",
-      "group": "test",
-      "problemMatcher": [],
-      "options": { "cwd": "../dotfiles" }
-    },
-    {
-      "label": "Validate: OMP Theme",
-      "type": "shell",
-      "command": "pwsh -NoProfile -File scripts/check-theme.ps1",
-      "group": "test",
-      "problemMatcher": [],
-      "options": { "cwd": "../dotfiles" }
-    },
-    {
-      "label": "NixOS: Switch (HP)",
-      "type": "shell",
-      "command": "ssh -t joseph@192.168.1.104 'sudo git -C /etc/nixos pull --ff-only && sudo nixos-rebuild switch --flake /etc/nixos#hp-dv9500-pavilion-nixos'",
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "NixOS: Switch (MSI)",
-      "type": "shell",
-      "command": "ssh -t joseph@192.168.1.106 'sudo git -C /etc/nixos pull --ff-only && sudo nixos-rebuild switch --flake /etc/nixos#msi-ge75-raider-nixos'",
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "NixOS: Test (HP)",
-      "type": "shell",
-      "command": "ssh -t joseph@192.168.1.104 'sudo git -C /etc/nixos pull --ff-only && sudo nixos-rebuild test --flake /etc/nixos#hp-dv9500-pavilion-nixos'",
-      "group": "test",
-      "problemMatcher": []
-    },
-    {
-      "label": "SSH: Test All Systems",
-      "type": "shell",
-      "command": "for host in opnsense nas proxmox wireguard tailscale omada netbox iventoy docker syncthing hp msi; do echo -n \"$host: \"; ssh -o ConnectTimeout=2 $host \"hostname\" 2>/dev/null || echo \"offline\"; done",
-      "group": "test",
-      "problemMatcher": []
-    }
-  ]
+    ]
 }
