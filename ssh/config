@@ -9,85 +9,85 @@ Host github.com
   IdentitiesOnly yes
   AddKeysToAgent yes
   IdentityAgent \\\\.\\pipe\\openssh-ssh-agentHost nas synology
-    HostName 192.168.1.10
-    User joseph
-    IdentityFile ~/.ssh/id_ed25519_unified
-    IdentitiesOnly yes
-    # Password auth will be disabled on Synology
+  HostName 192.168.1.10
+  User joseph
+  IdentityFile ~/.ssh/id_ed25519_unified
+  IdentitiesOnly yes
+  # Password auth will be disabled on Synology
 
 # MSI GE75 Raider NixOS
 Host msi msi-nixos
-    HostName 192.168.1.106
-    User joseph
-    IdentityFile ~/.ssh/id_ed25519_unified
-    IdentitiesOnly yes
+  HostName 192.168.1.106
+  User joseph
+  IdentityFile ~/.ssh/id_ed25519_unified
+  IdentitiesOnly yes
 
 # HP dv9500 Pavilion NixOS
 Host hp hp-nixos
-    HostName 192.168.1.104
-    User joseph
-    IdentityFile ~/.ssh/id_ed25519_unified
-    IdentitiesOnly yes
+  HostName 192.168.1.104
+  User joseph
+  IdentityFile ~/.ssh/id_ed25519_unified
+  IdentitiesOnly yes
 
 # Proxmox Host
 Host proxmox pve
-    HostName 192.168.1.40
-    User root
-    IdentityFile ~/.ssh/id_ed25519_unified
-    IdentitiesOnly yes
+  HostName 192.168.1.40
+  User root
+  IdentityFile ~/.ssh/id_ed25519_unified
+  IdentitiesOnly yes
 
 # LXC Containers
 Host wireguard lxc-wireguard
-    HostName 192.168.1.50
-    User root
-    IdentityFile ~/.ssh/id_ed25519_unified
-    IdentitiesOnly yes
+  HostName 192.168.1.50
+  User root
+  IdentityFile ~/.ssh/id_ed25519_unified
+  IdentitiesOnly yes
 
 Host tailscale lxc-tailscale
-    HostName 192.168.1.51
-    User root
-    IdentityFile ~/.ssh/id_ed25519_unified
-    IdentitiesOnly yes
+  HostName 192.168.1.51
+  User root
+  IdentityFile ~/.ssh/id_ed25519_unified
+  IdentitiesOnly yes
 
 Host omada lxc-omada
-    HostName 192.168.1.52
-    User root
-    IdentityFile ~/.ssh/id_ed25519_unified
-    IdentitiesOnly yes
+  HostName 192.168.1.52
+  User root
+  IdentityFile ~/.ssh/id_ed25519_unified
+  IdentitiesOnly yes
 
 Host netbox lxc-netbox
-    HostName 192.168.1.53
-    User root
-    IdentityFile ~/.ssh/id_ed25519_unified
-    IdentitiesOnly yes
+  HostName 192.168.1.53
+  User root
+  IdentityFile ~/.ssh/id_ed25519_unified
+  IdentitiesOnly yes
 
 Host iventoy lxc-iventoy
-    HostName 192.168.1.54
-    User root
-    IdentityFile ~/.ssh/id_ed25519_unified
-    IdentitiesOnly yes
+  HostName 192.168.1.54
+  User root
+  IdentityFile ~/.ssh/id_ed25519_unified
+  IdentitiesOnly yes
 
 Host docker lxc-docker
-    HostName 192.168.1.55
-    User root
-    IdentityFile ~/.ssh/id_ed25519_unified
-    IdentitiesOnly yes
+  HostName 192.168.1.55
+  User root
+  IdentityFile ~/.ssh/id_ed25519_unified
+  IdentitiesOnly yes
 
 Host syncthing lxc-syncthing
-    HostName 192.168.1.56
-    User root
-    IdentityFile ~/.ssh/id_ed25519_unified
-    IdentitiesOnly yes
+  HostName 192.168.1.56
+  User root
+  IdentityFile ~/.ssh/id_ed25519_unified
+  IdentitiesOnly yes
 
 # Default settings for all hosts
 Host *
-    IdentityFile ~/.ssh/id_ed25519_unified
-    AddKeysToAgent yes
-    ServerAliveInterval 60
-    ServerAliveCountMax 3
-    IdentitiesOnly yes
+  IdentityFile ~/.ssh/id_ed25519_unified
+  AddKeysToAgent yes
+  ServerAliveInterval 60
+  ServerAliveCountMax 3
+  IdentitiesOnly yes
 Host opnsense
-    HostName 192.168.1.1
-    User joseph
-    IdentityFile ~/.ssh/id_ed25519_unified
+  HostName 192.168.1.1
+  User joseph
+  IdentityFile ~/.ssh/id_ed25519_unified
 

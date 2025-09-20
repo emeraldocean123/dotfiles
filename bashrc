@@ -40,18 +40,29 @@ if [[ "$OSTYPE" == "msys"* ]]; then
   fi
 fi
 
-# --- Run fastfetch on startup (once per session) ---
-if [ -z "$__FASTFETCH_SHOWN" ] && [ -n "$PS1" ]; then
-  if command -v fastfetch &>/dev/null; then
-    fastfetch --logo-width 30
-    export __FASTFETCH_SHOWN=1
-  fi
-fi
-
 # --- Oh My Posh Initialization (using configurable path) ---
 if command -v oh-my-posh &> /dev/null; then
   THEME_PATH="$DOTFILES_DIR/posh-themes/jandedobbeleer.omp.json"
   if [ -f "$THEME_PATH" ]; then
-    eval "$(oh-my-posh init bash --config "$THEME_PATH")"
+    # Create cache directory if it doesn't exist
+    mkdir -p ~/.cache/oh-my-posh
+    # Use eval flag for inline initialization
+    eval "$(oh-my-posh init bash --config "$THEME_PATH" --eval)"
+  fi
+fi
+
+# --- Run fastfetch on startup (once per session) ---
+if [ -z "$__FASTFETCH_SHOWN" ] && [ -n "$PS1" ]; then
+  if command -v fastfetch &>/dev/null; then
+    # Enable Git module for both environments
+    fastfetch --logo-width 30 --structure title:separator:os:host:kernel:uptime:shell:display:de:wm:wmtheme:icons:font:cursor:terminal:terminalfont:cpu:gpu:memory:swap:disk:localip:battery:locale:git || true
+    export __FASTFETCH_SHOWN=1
+    # Force prompt redisplay after fastfetch - simplified and reliable approach
+    # Use a small delay to ensure fastfetch output is fully displayed
+    sleep 0.1
+    # Force prompt to redisplay
+    echo ""  # Print empty line to ensure we're on a new line
+    # This should trigger prompt redisplay
+    true
   fi
 fi

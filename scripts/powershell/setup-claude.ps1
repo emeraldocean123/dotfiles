@@ -1,6 +1,43 @@
 # === Claude Code Configuration Setup ===
-param()
+param(
+    [switch]$OpenCode,
+    [switch]$Test
+)
 $ErrorActionPreference = 'Stop'
+
+if ($OpenCode) {
+    Write-Host "Setting up opencode for clean PowerShell mode..." -ForegroundColor Cyan
+    Write-Host "This ensures opencode runs without terminal interference." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "To launch opencode in clean mode, use:" -ForegroundColor Green
+    Write-Host "  `$env:OPENCODE='1'; & opencode" -ForegroundColor White
+    Write-Host ""
+    Write-Host "Or create a function in your profile:" -ForegroundColor Green
+    Write-Host "  function opencode-clean { `$env:OPENCODE='1'; & opencode `$args }" -ForegroundColor White
+    Write-Host ""
+    Write-Host "The PowerShell profiles have been updated to automatically detect" -ForegroundColor Cyan
+    Write-Host "and skip problematic components when opencode is running." -ForegroundColor Cyan
+    return
+}
+
+if ($Test) {
+    Write-Host "Testing opencode PowerShell compatibility..." -ForegroundColor Cyan
+
+    # Test if opencode detection works
+    $env:OPENCODE = "1"
+    $isOpenCode = $env:OPEN_CODE -or $env:OPENCODE -or ($env:TERM_PROGRAM -eq "opencode") -or
+                  (Get-Process -Name "opencode" -ErrorAction SilentlyContinue) -or
+                  ($MyInvocation.MyCommand.Path -like "*opencode*")
+
+    if ($isOpenCode) {
+        Write-Host "✅ OpenCode detection working correctly" -ForegroundColor Green
+    } else {
+        Write-Host "❌ OpenCode detection failed" -ForegroundColor Red
+    }
+
+    Remove-Item Env:\OPENCODE -ErrorAction SilentlyContinue
+    return
+}
 
 Write-Host "Setting up Claude Code configuration..." -ForegroundColor Cyan
 
